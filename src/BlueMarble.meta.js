@@ -17,6 +17,7 @@
 // @grant        GM.setValue
 // @grant        GM_getValue
 // @resource     CSS-BM-File https://raw.githubusercontent.com/SwingTheVine/Wplace-BlueMarble/a3b4a288514dc48a9232b1aeeb6b377af6fdfe7c/dist/BlueMarble.user.css
+// @resource     HTML-BM-FILE
 // ==/UserScript==
 
 // Wplace  --> https://wplace.live

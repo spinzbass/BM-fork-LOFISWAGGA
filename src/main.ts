@@ -10,6 +10,5 @@ function inject(callback: Function) {
  * @since 0.11.15
  */
 inject(() => {
-const variable: string = "Test variable";
-console.log(variable);
+
 })
