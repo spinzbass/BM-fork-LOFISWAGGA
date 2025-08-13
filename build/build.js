@@ -63,7 +63,7 @@ esbuild.build({
 
 // Compiles the JS files
 const resultEsbuild = await esbuild.build({
-  entryPoints: ['src/main.js'], // "Infect" the files from this point (it spreads from this "patient 0")
+  entryPoints: ['src/main.ts'], // "Infect" the files from this point (it spreads from this "patient 0")
   bundle: true, // Should the code be bundled?
   outfile: 'dist/BlueMarble.user.js', // The file the bundled code is exported to
   format: 'iife', // What format the bundler bundles the code into
