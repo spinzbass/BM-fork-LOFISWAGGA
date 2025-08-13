@@ -118,19 +118,19 @@ if (!isGitHub) {
 
 // Mangles the CSS selectors
 // If we are in production (GitHub Workflow), then generate the CSS mapping
-const mapCSS = mangleSelectors({
-  inputPrefix: 'bm-',
-  outputPrefix: 'bm-',
-  pathJS: 'dist/BlueMarble.user.js',
-  pathCSS: 'dist/BlueMarble.user.css',
-  importMap: importedMapCSS,
-  returnMap: isGitHub
-});
+// const mapCSS = mangleSelectors({
+//   inputPrefix: 'bm-',
+//   outputPrefix: 'bm-',
+//   pathJS: 'dist/BlueMarble.user.js',
+//   pathCSS: 'dist/BlueMarble.user.css',
+//   importMap: importedMapCSS,
+//   returnMap: isGitHub
+// });
 
 // If a map was returned, write it to the file
-if (mapCSS) {
-  fs.writeFileSync('dist/BlueMarble.user.css.map.json', JSON.stringify(mapCSS, null, 2));
-}
+// if (mapCSS) {
+//   fs.writeFileSync('dist/BlueMarble.user.css.map.json', JSON.stringify(mapCSS, null, 2));
+// }
 
 // Adds the banner
 fs.writeFileSync(
