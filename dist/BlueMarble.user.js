@@ -16,11 +16,11 @@
 // @grant        GM_addStyle
 // @grant        GM.setValue
 // @grant        GM_getValue
-// @resource     CSS-BM-File https://raw.githubusercontent.com/SwingTheVine/Wplace-BlueMarble/a3b4a288514dc48a9232b1aeeb6b377af6fdfe7c/dist/BlueMarble.user.css
+// @resource     CSS-BM-File https://raw.githubusercontent.com/AloeSapling/Wplace-BlueMarble/refs/heads/overhaul/dist/BlueMarble.user.css
 // @resource     HTML-BM-File https://raw.githubusercontent.com/AloeSapling/Wplace-BlueMarble/refs/heads/overhaul/src/overlay.html
 // ==/UserScript==
 
 // Wplace  --> https://wplace.live
 // License --> https://www.mozilla.org/en-US/MPL/2.0/
 
-(()=>{var t={};(async()=>{t.t=await async function(){return fetch(await GM.getResourceUrl("HTML-BM-File")).then(t=>t.text())}(),await GM.getResourceUrl("CSS-BM-File").then(n=>{const c=n.split(",")[1];t.o=atob(c)}),function(t,...n){const c=document.createElement("script");c.textContent=`(${t})(${n.map(t=>JSON.stringify(t)).join(", ")});`,document.documentElement?.appendChild(c),c.remove()}(t=>{console.log("Test",t);const n=document.createElement("style");n.textContent=t.o||"",document.body.appendChild(n),document.body.innerHTML+=t.t},t)})()})();
+(()=>{var t={};(async()=>{t.t=await async function(){return fetch(await GM.getResourceUrl("HTML-BM-File")).then(t=>t.text())}(),t.o=await GM.getResourceUrl("CSS-BM-File"),function(t,n){const c=document.createElement("script");c.textContent=`(${t=>{console.log("Test",t);const n=document.createElement("link");n.rel="stylesheet",n.href=t.o||"",document.head.appendChild(n),document.body.innerHTML+=t.t}})(${JSON.stringify(n)});`,document.documentElement?.appendChild(c),c.remove()}(0,t)})()})();

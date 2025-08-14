@@ -1,36 +1,40 @@
 import { Context } from "./types";
-import { getGMResourceTextAsync } from "./utils";
+import { getGMResourceText } from "./utils";
 
-function inject(callback: Function, ...args: any) {
+/** Injects code into the client
+ * This code will execute outside of TamperMonkey's sandbox
+ * @param {*} callback - The code to execute
+ * @since 0.11.15
+ */
+function inject(callback: Function, context: Context) {
     const script: HTMLScriptElement = document.createElement('script');
-    script.textContent = `(${callback})(${args.map(arg => JSON.stringify(arg)).join(', ')});`;
+    script.textContent = `(${callback})(${JSON.stringify(context)});`;
     document.documentElement?.appendChild(script);
     script.remove();
 }
-/** What code to execute instantly in the client (webpage) to spy on fetch calls.
- * This code will execute outside of TamperMonkey's sandbox.
- * @since 0.11.15
-*/
-// declare function GM_getResourceText(resourceName: string): string;
-// declare function GM_addStyle(resourceName: string): void;
-// const html = GM_getResourceText('HTML-BM-FILE');
 
-// const cssOverlay = GM_getResourceText("CSS-BM-File");
-// GM_addStyle(cssOverlay);
 
 const context: Context = {};
 
+// Needs to be wrapped in async functionality to keep synchronous flow with the async GM functions
 (async () => {
-    context.HTMLData = await getGMResourceTextAsync("HTML-BM-File");
-    await GM.getResourceUrl("CSS-BM-File").then((dataURL)=>{
-        const base64Data = dataURL.split(',')[1];
-        context.CSSData = atob(base64Data);
-    });
+
+    context.HTMLData = await getGMResourceText("HTML-BM-File");
+    context.CSSUrl = await GM.getResourceUrl("CSS-BM-File");
+
+    /** What code to execute instantly in the client (webpage) to spy on fetch calls.
+     * This code will execute outside of TamperMonkey's sandbox.
+     * @since 0.11.15
+    */
     inject((ctx: Context) => {
         console.log("Test", ctx)
-        const style: HTMLStyleElement = document.createElement("style")
-        style.textContent = ctx.CSSData || "";
-            document.body.appendChild(style);
-        document.body.innerHTML += ctx.HTMLData;
+
+        const link: HTMLLinkElement = document.createElement("link") // Create element in order to link css
+        link.rel = "stylesheet";
+        link.href = ctx.CSSUrl || "";
+        document.head.appendChild(link); // Links the css to the document
+
+        document.body.innerHTML += ctx.HTMLData; // Inserts the raw html into body
+
     }, context);
 })();

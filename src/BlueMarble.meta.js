@@ -16,7 +16,7 @@
 // @grant        GM_addStyle
 // @grant        GM.setValue
 // @grant        GM_getValue
-// @resource     CSS-BM-File https://raw.githubusercontent.com/SwingTheVine/Wplace-BlueMarble/a3b4a288514dc48a9232b1aeeb6b377af6fdfe7c/dist/BlueMarble.user.css
+// @resource     CSS-BM-File https://raw.githubusercontent.com/AloeSapling/Wplace-BlueMarble/refs/heads/overhaul/dist/BlueMarble.user.css
 // @resource     HTML-BM-File https://raw.githubusercontent.com/AloeSapling/Wplace-BlueMarble/refs/heads/overhaul/src/overlay.html
 // ==/UserScript==
 
