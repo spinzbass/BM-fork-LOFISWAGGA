@@ -141,7 +141,8 @@
         <br>
         <img alt="Enable 'Developer Mode' and 'Allow user scripts'" src="https://github.com/SwingTheVine/Wplace-BlueMarble/blob/main/docs/assets/ComputerChromeInstall3.png"></li>
         <li>Enable "Allow user scripts."</li>
-        <li><strong>One-click install:</strong> Click this link to Install Blue Marble directly: <a href="https://github.com/SwingTheVine/Wplace-BlueMarble/releases/download/pre/BlueMarble.user.js" target="_blank" rel="noopener noreferrer"><strong>Install Blue Marble</strong></a><br>
+        <li><strong>One-click install:</strong> Click this link to Install Blue Marble directly: <a href="https://github.com/SwingTheVine/Wplace-BlueMarble/releases/download/pre/BlueMarble.user.js" target="_blank" rel="noopener noreferrer"><strong>Install Blue Marble</strong></a>
+        <br>
         TamperMonkey will automatically detect the userscript and prompt you to Install it.</li>
         <li>Refresh the <a href="https://wplace.live/" target="_blank" rel="noopener noreferrer">wplace.live</a> webpage.</li>
       </ol>
