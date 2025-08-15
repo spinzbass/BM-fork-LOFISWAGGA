@@ -6,20 +6,22 @@
  * 4. Compress & obfuscate the bundled JS file (terner)
  * 5. Runs the CSS selector mangler (cssMandler.js)
  * @since 0.0.6
- */
+*/
 
 // ES Module imports
-import esbuild from "esbuild";
-import fs from "fs";
-import { execSync } from "child_process";
-import { consoleStyle } from "./utils.js";
-import { createRequire } from "module";
-import { minify } from "html-minifier-terser";
+import esbuild from 'esbuild';
+import fs from 'fs';
+import { execSync } from 'child_process';
+import { consoleStyle } from './utils.js';
+import mangleSelectors from './cssMangler.js';
+
+import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 // CommonJS imports (require)
-const terser = require("terser");
+const terser = require('terser');
 
 const isGitHub = !!process.env?.GITHUB_ACTIONS; // Is this running in a GitHub Action Workflow?'
+
 console.log(`${consoleStyle.BLUE}Starting build...${consoleStyle.RESET}`);
 
 // Tries to build the wiki if build.js is run in a GitHub Workflow
@@ -35,14 +37,18 @@ console.log(`${consoleStyle.BLUE}Starting build...${consoleStyle.RESET}`);
 // }
 
 // Tries to bump the version
-// try {
-//   execSync('node build/update-version.js', { stdio: 'inherit' });
-// } catch (error) {
-//   console.error(`${consoleStyle.RED + consoleStyle.BOLD}Failed to update version number${consoleStyle.RESET}:`, error);
-//   process.exit(1);
-// }
+try {
+  const update = execSync('node build/update-version.js', { stdio: 'inherit' });
+  console.log(`Version updated in meta file ${consoleStyle.GREEN}successfully${consoleStyle.RESET}`);
+} catch (error) {
+  console.error(`${consoleStyle.RED + consoleStyle.BOLD}Failed to update version number${consoleStyle.RESET}:`, error);
+  process.exit(1);
+}
 
-// Gets a string array of all CSS files
+// Fetches the userscript metadata banner
+const metaContent = fs.readFileSync('src/BlueMarble.meta.js', 'utf8');
+
+// Compiles a string array of all CSS files
 const cssFiles = fs.readdirSync('src/')
   .filter(file => file.endsWith('.css'))
   .map(file => `src/${file}`);
@@ -54,39 +60,6 @@ esbuild.build({
   outfile: 'dist/BlueMarble.user.css',
   minify: true
 });
-
-const miniCSS = fs.readFileSync('dist/BlueMarble.user.css', 'utf-8')
-// A piece of code injected into the outputted JS file that injects the CSS into the page
-const cssAttachCode = `
-  const miniCSSStyleElem = document.createElement("style");
-  miniCSSStyleElem.textContent=\`${miniCSS}\`;
-  document.body.appendChild(miniCSSStyleElem);
-`
-const attachCodes = [cssAttachCode]
-
-// Gets a string array of all HTML files in src
-fs.readdirSync('src/')
-  .filter(file => file.endsWith('.html'))
-  .map(file => `src/${file}`)
-  .forEach(filePath => {
-    const html = fs.readFileSync(filePath, 'utf-8')
-    if(!html.startsWith('<!--')){
-      console.log(`${consoleStyle.RED}HTML file '${filePath}' doesn't start with a comment about its inject location${consoleStyle.RESET}`)
-    }else{
-      // Extract only the css query of where to attach this html
-      const cssQuery = html.slice(4, html.indexOf('-->')).trim() 
-      // Pushes a piece of code that injects the html into the page
-      attachCodes.push(`document.querySelector("${cssQuery}").innerHTML += \`${html}\`;`);
-    }
-  })
-
-// Gets the current 
-let code = fs.readFileSync('src/main.ts', 'utf-8')
-const originalCode = code;
-// Inject the codes that inject CSS / HTML into the page
-code = attachCodes.join('\n') + code;
-// Write the altered file data back into a file
-fs.writeFileSync('src/main.ts', code, { flag: 'w+' })
 
 // Compiles the JS files
 const resultEsbuild = await esbuild.build({
@@ -161,9 +134,9 @@ if (!isGitHub) {
 
 // Adds the banner
 fs.writeFileSync(
-  'dist/index.js', 
-  "(function (){ return ({ patches: [], load: () => {" + resultTerser.code + "},});})();", 
+  'dist/BlueMarble.user.js', 
+  metaContent + fs.readFileSync('dist/BlueMarble.user.js', 'utf8'), 
   'utf8'
 );
-fs.writeFileSync('src/main.ts', originalCode)
+
 console.log(`${consoleStyle.GREEN + consoleStyle.BOLD + consoleStyle.UNDERLINE}Building complete!${consoleStyle.RESET}`);
