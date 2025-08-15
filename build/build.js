@@ -35,12 +35,12 @@ console.log(`${consoleStyle.BLUE}Starting build...${consoleStyle.RESET}`);
 // }
 
 // Tries to bump the version
-// try {
-//   execSync('node build/update-version.js', { stdio: 'inherit' });
-// } catch (error) {
-//   console.error(`${consoleStyle.RED + consoleStyle.BOLD}Failed to update version number${consoleStyle.RESET}:`, error);
-//   process.exit(1);
-// }
+try {
+  execSync('node build/update-version.js', { stdio: 'inherit' });
+} catch (error) {
+  console.error(`${consoleStyle.RED + consoleStyle.BOLD}Failed to update version number${consoleStyle.RESET}:`, error);
+  process.exit(1);
+}
 
 // Gets a string array of all CSS files
 const cssFiles = fs.readdirSync('src/')
