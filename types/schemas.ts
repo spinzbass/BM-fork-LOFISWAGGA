@@ -55,3 +55,22 @@ export const CharityJSON = z.object({
   ),
 });
 
+export const BlueMarbleJSON = z.object({
+  whoami: z.string(),
+  scriptVersion: z.string().refine((version) => version.match("^0|([1-9]\d*)([.](0|([1-9]\d*))){2}$")),
+  schemaVersion: z.string().refine((version) => version.match("^0|([1-9]\d*)([.](0|([1-9]\d*))){2}$")),
+  templates: z.array(z.object({
+    name: z.string().optional(),
+    coords: z.array(z.number()),
+    idSort: z.number(),
+    idUser: z.string(),
+    enabled: z.boolean().optional(),
+    urlLink: z.string().optional(),
+    urlType: z.string().optional(),
+    file: z.string().optional(),
+    tiles: z.array(z.object({
+      image: z.string(),
+      coords: z.string(),
+    })).optional()
+  }))
+})
