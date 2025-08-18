@@ -62,18 +62,12 @@ export const BlueMarbleJSON = z.object({
   templates: z.array(z.object({
     name: z.string().optional(),
     coords: z.array(z.number()),
-    idSort: z.number(),
     idUser: z.string(),
     enabled: z.boolean().optional(),
     urlLink: z.string().optional(),
-    urlType: z.string().optional(),
-    file: z.string().optional(),
-    tiles: z.array(z.object({
-      image: z.string(),
-      coords: z.string(),
-    })).optional()
   }))
 })
+
 
 export type TCharityJSON = z.infer<typeof CharityJSON>;
 export type TBlueMarbleJSON = z.infer<typeof BlueMarbleJSON>;
