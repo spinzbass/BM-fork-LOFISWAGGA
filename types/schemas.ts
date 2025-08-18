@@ -74,3 +74,6 @@ export const BlueMarbleJSON = z.object({
     })).optional()
   }))
 })
+
+export type TCharityJSON = z.infer<typeof CharityJSON>;
+export type TBlueMarbleJSON = z.infer<typeof BlueMarbleJSON>;
