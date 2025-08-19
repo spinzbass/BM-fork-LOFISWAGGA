@@ -62,7 +62,7 @@ export const BlueMarbleJSON = z.object({
   templates: z.array(z.object({
     name: z.string().optional(),
     coords: z.array(z.number()),
-    idUser: z.string(),
+    idUser: z.number().optional(),
     enabled: z.boolean().optional(),
     urlLink: z.string().optional(),
   }))

@@ -13,7 +13,7 @@ class SchemaManager {
     data?: Schemas;
     private type: SchemaTypeNames; 
     toCharity(){
-        if(this.type=="CHA"){return;}
+        if(this.type==="CHA"){return;}
         if(BlueMarbleJSON.parse(this.data)){
             this.data = this.data as TBlueMarbleJSON;
             this.data = CharityJSON.parse({
@@ -41,7 +41,7 @@ class SchemaManager {
         }
     }
     toBlueMarble(){
-        if(this.type=="BM"){return;}
+        if(this.type==="BM"){return;}
         if(CharityJSON.parse(this.data)){
             this.data = this.data as TCharityJSON;
             this.data = BlueMarbleJSON.parse({
@@ -56,6 +56,24 @@ class SchemaManager {
                     urlLink: template.sources[0], // IDK about this one
                 }))
             })
+        }
+    }
+    appendTemplates(schema: Schemas){
+        if(this.type !== "BM"){ return; };
+        this.data = this.data as TBlueMarbleJSON
+        if(CharityJSON.parse(schema)){
+            schema = schema as TCharityJSON;
+            this.data.templates.push(...schema.templates.map((template)=>({
+                name: template.name,
+                coords: Object.values(template.coords),
+                idUser: template.author,
+                enabled: template.enabled,
+                urlLink: template.sources[0], 
+            })))
+        }
+        else if(BlueMarbleJSON.parse(schema)){
+            schema = schema as TBlueMarbleJSON
+            this.data.templates.push(...schema.templates);
         }
     }
 }
