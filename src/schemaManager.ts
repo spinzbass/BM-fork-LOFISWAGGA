@@ -95,8 +95,8 @@ class DataManager {
             // Then just append the data, no format change necessary
             object = object as TBlueMarbleJSON
             this.object.templates.push(...object.templates);
-            if(!this.object.links){ this.object.links = object.links}
-            else if(object.links){ this.object.links.push(...object.links) }
+            if(!this.object.links){ this.object.links = object.links} // If the stored object doesn't have a links array yet, create / set it with the appended data
+            else if(object.links){ this.object.links.push(...object.links) } // Check if appended data has a links array, otherwise the spread operator might cause errors or undefined behaviour
         }
     }
 
