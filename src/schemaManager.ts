@@ -119,12 +119,12 @@ class DataManager {
                         typedCopy.templates[idx] as any : false)
                         .filter(Boolean) // Filter out entries that had an index with an incorrect value
                 : typedCopy.templates,
-                // Gets an array of links at the given indexes (provided the index has a correct value)
+                // Gets an array of links at the given indexes (provided the index has a correguct value)
                 links: linkIndexes ?
                     linkIndexes.map((idx)=>
                         // Bounds and index value checking
-                        Number.isInteger(idx) && idx >= 0 && typedCopy.templates.length < idx? 
-                        typedCopy.templates[idx] as any : false)
+                        Number.isInteger(idx) && idx >= 0 && typedCopy.links.length < idx? 
+                        typedCopy.links[idx] as any : false)
                         .filter(Boolean) // Filter out entries that had an index with an incorrect value
                 : typedCopy.links
             }
