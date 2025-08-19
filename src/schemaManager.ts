@@ -2,30 +2,30 @@ import { Schemas, SchemaTypeNames } from "../types/types";
 import { BlueMarbleJSON, CharityJSON, TBlueMarbleJSON, TCharityJSON } from "../types/schemas";
 
 class DataManager {
-    constructor(data?: Schemas){
-        this.data = data;
-        if(data){
+    constructor(object?: Schemas){
+        this.object = object;
+        if(object){
             // Set the appropriate schema type
             // This allows for a string check instead of schema parse check
-            if(CharityJSON.safeParse(data).success){this.type = "CHA"}
-            else if(BlueMarbleJSON.safeParse(data).success){this.type = "BM"}
-            else {this.type = "N/A"} // Type of data is unknown
+            if(CharityJSON.safeParse(object).success){this.type = "CHA"}
+            else if(BlueMarbleJSON.safeParse(object).success){this.type = "BM"}
+            else {this.type = "N/A"} // Type of the object is unknown
         }
     }
-    data?: Schemas; // Stored data
-    type: SchemaTypeNames; // String variable representing the type / schema of stored data
-    /** Converts the current data in the format of any schema into the format of Charity's schema */
+    object?: Schemas; // Stored object
+    type: SchemaTypeNames; // String variable representing the type / schema of the stored object
+    /** Converts the current object in the format of any schema into the format of Charity's schema */
     toCharitySchema(){
         if(this.type === "N/A" || this.type === "CHA"){return;} // If the schema type is unknown or already correct, don't do any conversions
         if(this.type === "BM"){
-            this.data = this.data as TBlueMarbleJSON; // Type is BM so treat the data as a Blue Marble object
-            this.data = {
+            this.object = this.object as TBlueMarbleJSON; // Type is BM so treat the object as a Blue Marble object
+            this.object = {
                 meta:{
                     whoami: "Charity", // Identifies the type of JSON format
-                    schemaVersion: this.data.schemaVersion,
-                    scriptVersion: this.data.scriptVersion,
+                    schemaVersion: this.object.schemaVersion,
+                    scriptVersion: this.object.scriptVersion,
                 },
-                templates: this.data.templates.map((template)=>({
+                templates: this.object.templates.map((template)=>({
                     name: template.name, // Name of the template
                     enabled: template.enabled || false,
                     // Location of the template
@@ -45,16 +45,16 @@ class DataManager {
         }
         this.type = "CHA"; // Update the type to match
     }
-    /** Converts the current data in the format of any schema into the format of Blue Marble's schema */
+    /** Converts the current object in the format of any schema into the format of Blue Marble's schema */
     toBlueMarbleSchema(){
         if(this.type === "N/A" || this.type === "BM"){return;} // If the schema type is unknown or already correct, don't do any conversions
         if(this.type === "CHA"){
-            this.data = this.data as TCharityJSON; // Type is CHA so treat the data as a Charity object
-            this.data = {
+            this.object = this.object as TCharityJSON; // Type is CHA so treat the object as a Charity object
+            this.object = {
                 whoami: "BlueMarble", // Identifies the type of JSON format
-                schemaVersion: this.data.meta.schemaVersion,
-                scriptVersion: this.data.meta.scriptVersion,
-                templates: this.data.templates.map((template)=>({
+                schemaVersion: this.object.meta.schemaVersion,
+                scriptVersion: this.object.meta.scriptVersion,
+                templates: this.object.templates.map((template)=>({
                     name: template.name, // Name of the template
                     // Charity stores coordinates in an object, so we get an array of the values in the object
                     coords: Object.values(template.coords),
@@ -67,14 +67,17 @@ class DataManager {
         }
         this.type = "BM"; // Update the type to match
     }
-    appendData(data: Schemas){
-        if(this.type !== "BM"){ return; }; // Only append data if the stored data is in Blue Marble's format
-        this.data = this.data as TBlueMarbleJSON
-        // If the data is in Charity's format
-        if(CharityJSON.parse(data)){
+    /** Appends non-meta data from the provided object into the stored object 
+     * @param {Schemas} object Object from which the appended data is taken
+    */
+    appendData(object: Schemas){
+        if(this.type !== "BM"){ return; }; // Only append object if the stored object is in Blue Marble's format
+        this.object = this.object as TBlueMarbleJSON
+        // If the provided object is in Charity's format
+        if(CharityJSON.parse(object)){
             // Then we have to convert the template data to Blue Marble's format and then append the data
-            data = data as TCharityJSON;
-            this.data.templates.push(...data.templates.map((template)=>({
+            object = object as TCharityJSON;
+            this.object.templates.push(...object.templates.map((template)=>({
                 name: template.name, // Name of the template
                 // Charity stores coordinates in an object, so we convert it to an array valuesz
                 coords: Object.values(template.coords),
@@ -84,27 +87,27 @@ class DataManager {
                 uuid: template.uuid // UUID to distinguish templates made by the same author
             })))
         }
-        // If the data is already in Blue Marble's format
-        else if(BlueMarbleJSON.parse(data)){
+        // If the object is already in Blue Marble's format
+        else if(BlueMarbleJSON.parse(object)){
             // Then just append the data, no format change necessary
-            data = data as TBlueMarbleJSON
-            this.data.templates.push(...data.templates);
+            object = object as TBlueMarbleJSON
+            this.object.templates.push(...object.templates);
         }
     }
 }
 
-/** Converts data in the format of any schema into the format of Blue Marble's schema
- * @param {Schemas} data Data that is converted.
+/** Converts an object in the format of any schema into the format of Blue Marble's schema
+ * @param {Schemas} object The object that is converted.
  */
-function toBlueMarbleSchema(data: Schemas): TBlueMarbleJSON{
-    if(BlueMarbleJSON.parse(data)){ return data as TBlueMarbleJSON }
-    if(CharityJSON.parse(data)){
-        data = data as TCharityJSON
+function toBlueMarbleSchema(object: Schemas): TBlueMarbleJSON{
+    if(BlueMarbleJSON.parse(object)){ return object as TBlueMarbleJSON }
+    if(CharityJSON.parse(object)){
+        object = object as TCharityJSON
         return {
-                whoami: data.meta.whoami, // Identifies the type of JSON format
-                schemaVersion: data.meta.schemaVersion,
-                scriptVersion: data.meta.scriptVersion,
-                templates: data.templates.map((template)=>({
+                whoami: object.meta.whoami, // Identifies the type of JSON format
+                schemaVersion: object.meta.schemaVersion,
+                scriptVersion: object.meta.scriptVersion,
+                templates: object.templates.map((template)=>({
                     name: template.name, // Name of the template
                     // Charity stores coordinates in an object, so we get an array of the values in the object
                     coords: Object.values(template.coords),
@@ -115,23 +118,23 @@ function toBlueMarbleSchema(data: Schemas): TBlueMarbleJSON{
                 }))
         }
     }
-    return data as TBlueMarbleJSON
+    return object as TBlueMarbleJSON
 }
 
-/** Converts data in the format of any schema into the format of Charity's schema
- * @param {Schemas} data Data that is converted.
+/** Converts object in the format of any schema into the format of Charity's schema
+ * @param {Schemas} object The object that is converted.
  */
-function toCharitySchema(data: Schemas): TCharityJSON{
-    if(CharityJSON.parse(data)){ return data as TCharityJSON}
-    if(BlueMarbleJSON.parse(data)){
-        data = data as TBlueMarbleJSON
+function toCharitySchema(object: Schemas): TCharityJSON{
+    if(CharityJSON.parse(object)){ return object as TCharityJSON}
+    if(BlueMarbleJSON.parse(object)){
+        object = object as TBlueMarbleJSON
         return {
                 meta:{
-                    whoami: data.whoami, // Identifies the type of JSON format
-                    schemaVersion: data.schemaVersion,
-                    scriptVersion: data.scriptVersion,
+                    whoami: object.whoami, // Identifies the type of JSON format
+                    schemaVersion: object.schemaVersion,
+                    scriptVersion: object.scriptVersion,
                 },
-                templates: data.templates.map((template)=>({
+                templates: object.templates.map((template)=>({
                     name: template.name, // Name of the template
                     enabled: template.enabled || false,
                     // Location of the template
@@ -149,5 +152,5 @@ function toCharitySchema(data: Schemas): TCharityJSON{
                 blacklist: [],
             };
     }
-    return data as TCharityJSON
+    return object as TCharityJSON
 }
