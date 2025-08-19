@@ -1,7 +1,7 @@
 import { Schemas, SchemaTypeNames } from "../types/types";
 import { BlueMarbleJSON, CharityJSON, BM_SCHEMA_VERSION, TBlueMarbleJSON, TCharityJSON, CHA_SCHEMA_VERSION } from "../types/schemas";
 
-class DataManager {
+export default class DataManager {
     constructor(object?: Schemas){
         this.object = object;
         if(object){
@@ -12,8 +12,9 @@ class DataManager {
             else {this.type = "N/A"} // Type of the object is unknown
         }
     }
-    object?: Schemas; // Stored object
-    type: SchemaTypeNames; // String variable representing the type / schema of the stored object
+    private object?: Schemas; // Stored object
+
+    private type: SchemaTypeNames; // String variable representing the type / schema of the stored object
 
     /** Converts the current object in the format of any schema into the format of Charity's schema */
     toCharitySchema(){
@@ -142,12 +143,31 @@ class DataManager {
             : typedCopy.templates,
             
         }
-
     }
+    /**Updates the stored object whilst making sure the type matches
+     * @param {Schemas} data The data used to update the stored object
+     */
+    update(data: Schemas){
+        if(BlueMarbleJSON.safeParse(data).success){this.type = "BM"}
+        else if(CharityJSON.safeParse(data).success){this.type = "CHA"}
+        else {return} // If it doesn't match any known schema, then disregard the data
+        this.object = data;
+    }
+    /**Gets the stored object */
+    get(): Schemas | undefined{
+        return this.object;
+    }
+
+    /**Gets the stored type of the stored object 
+     * @returns A string representing the type of schema / format (see types.ts)
+    */
+   getType(): SchemaTypeNames{
+    return this.type;
+   }
 }
 
 /** Converts an object in the format of any schema into the format of Blue Marble's schema
- * @param {Schemas} object The object that is converted.
+ * @param {Schemas} object The object that is converted
  */
 function toBlueMarbleSchema(object: Schemas): TBlueMarbleJSON{
     if(BlueMarbleJSON.parse(object)){ return object as TBlueMarbleJSON }
