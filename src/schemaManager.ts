@@ -94,6 +94,25 @@ class DataManager {
             this.object.templates.push(...object.templates);
         }
     }
+    /** Takes in paramaters used to modify or filter data to create a desired subset of data, ready to be exported
+     * @param {number[] | undefined} indexes A list of indexes representing which templates to export, if omitted or empty, returns all templates
+     * @returns {Schemas | undefined} An object matching the provided parameters. If the stored object is undefined then so is the returned value
+     */
+    getExportableData(indexes?: number[]): Schemas | undefined{
+        if(!indexes || indexes.length == 0){ return this.object } // Return the whole object
+        if(this.type == "N/A") { return undefined} // Return nothing if the type of the stored object is unknown
+        this.object = this.object as Schemas
+        return {
+            ...this.object,
+            // Gets an array of templates at the given indexes (provided the index has a correct value)
+            templates: indexes.map((idx)=>
+                // Bounds and index value checking
+                Number.isInteger(idx) && idx >= 0 && this.object!.templates.length < idx? 
+                this.object!.templates[idx] as any : false)
+            .filter(Boolean) // Filter out entries that had an index with an incorrect value
+        }
+
+    }
 }
 
 /** Converts an object in the format of any schema into the format of Blue Marble's schema
