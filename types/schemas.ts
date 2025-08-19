@@ -70,11 +70,20 @@ export const BlueMarbleJSON = z.object({
   templates: z.array(z.object({
     name: z.string().optional(), // Name of the template
     coords: z.array(z.number()), // 4 element array containing the location of the template
-    idUser: z.number().optional(), // Numerical ID of the author, taken from wplace
+    authorID: z.number().optional(), // Numerical ID of the author, taken from wplace
     enabled: z.boolean().optional(),
     urlLink: z.string().optional(), // Link to the template image's file data
     uuid: z.string(), // UUID to distinguish templates made by the same author
-  }))
+  })),
+  links: z.array(z.object({
+    name: z.string().optional(), // Name of URL
+    url: z.string(),
+    // List of data identifying a template, the identified templates are the ones gotten from the URL
+    associatedTemplateIDs: z.array(z.object({
+      authorID: z.number().optional(), // Numerical ID of the author, taken from wplace
+      uuid: z.string() // UUID to distinguish templates made by the same author
+    })).optional()
+  })).optional(),
 })
 
 

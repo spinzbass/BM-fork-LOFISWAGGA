@@ -14,6 +14,7 @@ class DataManager {
     }
     object?: Schemas; // Stored object
     type: SchemaTypeNames; // String variable representing the type / schema of the stored object
+
     /** Converts the current object in the format of any schema into the format of Charity's schema */
     toCharitySchema(){
         if(this.type === "N/A" || this.type === "CHA"){return;} // If the schema type is unknown or already correct, don't do any conversions
@@ -36,7 +37,7 @@ class DataManager {
                         py: template.coords[3],
                     },
                     sources: [template.urlLink || ""], // File data of the template's image
-                    author: template.idUser, // Numerical ID of the author, taken from wplace
+                    author: template.authorID, // Numerical ID of the author, taken from wplace
                     uuid: template.uuid, // UUID to distinguish templates made by the same author
                 })),
                 whitelist: [],
@@ -45,6 +46,7 @@ class DataManager {
         }
         this.type = "CHA"; // Update the type to match
     }
+
     /** Converts the current object in the format of any schema into the format of Blue Marble's schema */
     toBlueMarbleSchema(){
         if(this.type === "N/A" || this.type === "BM"){return;} // If the schema type is unknown or already correct, don't do any conversions
@@ -67,6 +69,7 @@ class DataManager {
         }
         this.type = "BM"; // Update the type to match
     }
+
     /** Appends non-meta data from the provided object into the stored object 
      * @param {Schemas} object Object from which the appended data is taken
     */
@@ -92,24 +95,52 @@ class DataManager {
             // Then just append the data, no format change necessary
             object = object as TBlueMarbleJSON
             this.object.templates.push(...object.templates);
+            if(!this.object.links){ this.object.links = object.links}
+            else if(object.links){ this.object.links.push(...object.links) }
         }
     }
+
     /** Takes in paramaters used to modify or filter data to create a desired subset of data, ready to be exported
-     * @param {number[] | undefined} indexes A list of indexes representing which templates to export, if omitted or empty, returns all templates
+     * @param {number[] | undefined} templateIndexes A list of indexes representing which templates to export, if omitted exports all templates, if empty exports none
+     * @param {number[] | undefined} linkIndexes A list of indexes representing which links to export, if omitted exports all links, if empty exports none
      * @returns {Schemas | undefined} An object matching the provided parameters. If the stored object is undefined then so is the returned value
      */
-    getExportableData(indexes?: number[]): Schemas | undefined{
-        if(!indexes || indexes.length == 0){ return this.object } // Return the whole object
-        if(this.type == "N/A") { return undefined} // Return nothing if the type of the stored object is unknown
-        this.object = this.object as Schemas
+    getExportableData(templateIndexes?: number[], linkIndexes?: number[]): Schemas | null{
+        if(this.type === "N/A") { return null} // Return nothing if the type of the stored object is unknown
+        if((this.object as Schemas).hasOwnProperty("links")){
+            const typedCopy = this.object as Schemas & {links: any[]}
+            return {
+                ...typedCopy,
+                // Gets an array of templates at the given indexes (provided the index has a correct value)
+                templates: templateIndexes ? 
+                    templateIndexes.map((idx)=>
+                        // Bounds and index value checking
+                        Number.isInteger(idx) && idx >= 0 && typedCopy.templates.length < idx? 
+                        typedCopy.templates[idx] as any : false)
+                        .filter(Boolean) // Filter out entries that had an index with an incorrect value
+                : typedCopy.templates,
+                // Gets an array of links at the given indexes (provided the index has a correct value)
+                links: linkIndexes ?
+                    linkIndexes.map((idx)=>
+                        // Bounds and index value checking
+                        Number.isInteger(idx) && idx >= 0 && typedCopy.templates.length < idx? 
+                        typedCopy.templates[idx] as any : false)
+                        .filter(Boolean) // Filter out entries that had an index with an incorrect value
+                : typedCopy.links
+            }
+        }
+        const typedCopy = this.object as Schemas
         return {
-            ...this.object,
+            ...typedCopy,
             // Gets an array of templates at the given indexes (provided the index has a correct value)
-            templates: indexes.map((idx)=>
+            templates: templateIndexes ? 
+            templateIndexes.map((idx)=>
                 // Bounds and index value checking
-                Number.isInteger(idx) && idx >= 0 && this.object!.templates.length < idx? 
-                this.object!.templates[idx] as any : false)
+                Number.isInteger(idx) && idx >= 0 && typedCopy.templates.length < idx? 
+                typedCopy.templates[idx] as any : false)
             .filter(Boolean) // Filter out entries that had an index with an incorrect value
+            : typedCopy.templates,
+            
         }
 
     }
@@ -164,7 +195,7 @@ function toCharitySchema(object: Schemas): TCharityJSON{
                         py: template.coords[3],
                     },
                     sources: [template.urlLink || ""], // File data of the template's image
-                    author: template.idUser, // Numerical ID of the author, taken from wplace
+                    author: template.authorID, // Numerical ID of the author, taken from wplace
                     uuid: template.uuid, // UUID to distinguish templates made by the same author
                 })),
                 whitelist: [],
