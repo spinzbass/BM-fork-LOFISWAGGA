@@ -59,3 +59,53 @@ class SchemaManager {
         }
     }
 }
+
+function toBlueMarbleSchema(schema: Schemas): TBlueMarbleJSON{
+    if(BlueMarbleJSON.parse(schema)){ return schema as TBlueMarbleJSON }
+    if(CharityJSON.parse(schema)){
+        schema = schema as TCharityJSON
+        return BlueMarbleJSON.parse({
+                whoami: schema.meta.whoami,
+                schemaVersion: schema.meta.schemaVersion,
+                scriptVersion: schema.meta.scriptVersion,
+                templates: schema.templates.map((template)=>({
+                    name: template.name,
+                    coords: Object.values(template.coords),
+                    idUser: template.author,
+                    enabled: template.enabled,
+                    urlLink: template.sources[0], // IDK about this one
+                }))
+        })
+    }
+    return schema as TBlueMarbleJSON
+}
+
+function toCharitySchema(schema: Schemas): TCharityJSON{
+    if(CharityJSON.parse(schema)){ return schema as TCharityJSON}
+    if(BlueMarbleJSON.parse(schema)){
+        schema = schema as TBlueMarbleJSON
+        return CharityJSON.parse({
+                meta:{
+                    whoami: schema.whoami,
+                    schemaVersion: schema.schemaVersion,
+                    scriptVersion: schema.scriptVersion,
+                },
+                templates: schema.templates.map((template)=>({
+                    name: template.name,
+                    enabled: template.enabled,
+                    coords: {
+                        tx: template.coords[0],
+                        ty: template.coords[1],
+                        px: template.coords[2],
+                        py: template.coords[3],
+                    },
+                    sources: [template.urlLink],
+                    author: template.idUser,
+                    uuid: template.idUser,
+                })),
+                whitelist: [],
+                blacklist: [],
+            });
+    }
+    return schema as TCharityJSON
+}
