@@ -1,5 +1,5 @@
 import { Schemas, SchemaTypeNames } from "../types/types";
-import { BlueMarbleJSON, CharityJSON, TBlueMarbleJSON, TCharityJSON } from "../types/schemas";
+import { BlueMarbleJSON, CharityJSON, BM_SCHEMA_VERSION, TBlueMarbleJSON, TCharityJSON, CHA_SCHEMA_VERSION } from "../types/schemas";
 
 class DataManager {
     constructor(object?: Schemas){
@@ -23,7 +23,7 @@ class DataManager {
             this.object = {
                 meta:{
                     whoami: "Charity", // Identifies the type of JSON format
-                    schemaVersion: this.object.schemaVersion,
+                    schemaVersion: CHA_SCHEMA_VERSION,
                     scriptVersion: this.object.scriptVersion,
                 },
                 templates: this.object.templates.map((template)=>({
@@ -54,7 +54,7 @@ class DataManager {
             this.object = this.object as TCharityJSON; // Type is CHA so treat the object as a Charity object
             this.object = {
                 whoami: "BlueMarble", // Identifies the type of JSON format
-                schemaVersion: this.object.meta.schemaVersion,
+                schemaVersion: BM_SCHEMA_VERSION,
                 scriptVersion: this.object.meta.scriptVersion,
                 templates: this.object.templates.map((template)=>({
                     name: template.name, // Name of the template
@@ -155,7 +155,7 @@ function toBlueMarbleSchema(object: Schemas): TBlueMarbleJSON{
         object = object as TCharityJSON
         return {
                 whoami: object.meta.whoami, // Identifies the type of JSON format
-                schemaVersion: object.meta.schemaVersion,
+                schemaVersion: BM_SCHEMA_VERSION,
                 scriptVersion: object.meta.scriptVersion,
                 templates: object.templates.map((template)=>({
                     name: template.name, // Name of the template
@@ -181,7 +181,7 @@ function toCharitySchema(object: Schemas): TCharityJSON{
         return {
                 meta:{
                     whoami: object.whoami, // Identifies the type of JSON format
-                    schemaVersion: object.schemaVersion,
+                    schemaVersion: CHA_SCHEMA_VERSION,
                     scriptVersion: object.scriptVersion,
                 },
                 templates: object.templates.map((template)=>({
