@@ -61,22 +61,16 @@ export const CharityJSON = z.object({
   ),
 });
 
-export const BlueMarbleJSON = z.object({
-  whoami: z.string(), // Identifies the type of JSON format
-  scriptVersion: z
-  .string()
-  .refine((version) => version.match("^0|([1-9]\d*)([.](0|([1-9]\d*))){2}$"))      
-  .optional(),
-  schemaVersion: z.string().refine((version) => version.match("^0|([1-9]\d*)([.](0|([1-9]\d*))){2}$")),
-  templates: z.array(z.object({
+export const BlueMarbleTemplate = z.object({
     name: z.string().optional(), // Name of the template
     coords: z.array(z.number()), // 4 element array containing the location of the template
     authorID: z.number().optional(), // Numerical ID of the author, taken from wplace
     enabled: z.boolean(),
     urlLink: z.string().optional(), // Link to the template image's file data
     uuid: z.string(), // UUID to distinguish templates made by the same author
-  })),
-  links: z.array(z.object({
+  })
+
+export const BlueMarbleLink = z.object({
     name: z.string().optional(), // Name of URL
     url: z.string(),
     // List of data identifying a template, the identified templates are the ones gotten from the URL
@@ -84,12 +78,23 @@ export const BlueMarbleJSON = z.object({
       authorID: z.number().optional(), // Numerical ID of the author, taken from wplace
       uuid: z.string() // UUID to distinguish templates made by the same author
     })).optional()
-  })).optional(),
-})
+  })
 
+export const BlueMarbleJSON = z.object({
+  whoami: z.string(), // Identifies the type of JSON format
+  scriptVersion: z
+  .string()
+  .refine((version) => version.match("^0|([1-9]\d*)([.](0|([1-9]\d*))){2}$"))      
+  .optional(),
+  schemaVersion: z.string().refine((version) => version.match("^0|([1-9]\d*)([.](0|([1-9]\d*))){2}$")),
+  templates: z.array(BlueMarbleTemplate),
+  links: z.array(BlueMarbleLink).optional(),
+})
 
 export type TCharityJSON = z.infer<typeof CharityJSON>; // Creates a type matching the schema for better typesafety
 export type TBlueMarbleJSON = z.infer<typeof BlueMarbleJSON>; // Creates a type matching the schema for better typesafety
+export type TBlueMarbleTemplate = z.infer<typeof BlueMarbleTemplate>; // Creates a type matching the schema for better typesafety
+export type TBlueMarbleLink = z.infer<typeof BlueMarbleLink>; // Creates a type matching the schema for better typesafety
 
 export const BM_SCHEMA_VERSION = "0.1.0"
 export const CHA_SCHEMA_VERSION = "0.1.0"

@@ -1,5 +1,5 @@
 import { Schemas, SchemaTypeNames } from "../types/types";
-import { BlueMarbleJSON, CharityJSON, BM_SCHEMA_VERSION, TBlueMarbleJSON, TCharityJSON, CHA_SCHEMA_VERSION } from "../types/schemas";
+import { BlueMarbleJSON, CharityJSON, BM_SCHEMA_VERSION, TBlueMarbleJSON, TCharityJSON, CHA_SCHEMA_VERSION, TBlueMarbleTemplate, TBlueMarbleLink } from "../types/schemas";
 
 export default class DataManager {
     constructor(object?: Schemas){
@@ -15,6 +15,27 @@ export default class DataManager {
     private object?: Schemas; // Stored object
 
     private type: SchemaTypeNames; // String variable representing the type / schema of the stored object
+
+        /**Updates the stored object whilst making sure the type matches
+     * @param {Schemas} data The data used to update the stored object
+     */
+    update(data: Schemas){
+        if(BlueMarbleJSON.safeParse(data).success){this.type = "BM"}
+        else if(CharityJSON.safeParse(data).success){this.type = "CHA"}
+        else {return} // If it doesn't match any known schema, then disregard the data
+        this.object = data;
+    }
+    /**Gets the stored object */
+    get(): Schemas | undefined{
+        return this.object;
+    }
+
+    /**Gets the stored type of the stored object 
+     * @returns A string representing the type of schema / format (see types.ts)
+    */
+   getType(): SchemaTypeNames{
+    return this.type;
+   }
 
     /** Converts the current object in the format of any schema into the format of Charity's schema */
     toCharitySchema(){
@@ -101,6 +122,27 @@ export default class DataManager {
         }
     }
 
+    /**Appends the provided template to the list of templates.
+     * @param {TBlueMarbleTemplate} template The template data that is appended.
+    */
+    addTemplate(template: TBlueMarbleTemplate){
+        if(this.type !== "BM"){ return } // Only append if the stored object is in Blue Marble format
+        (this.object as TBlueMarbleJSON).templates.push(template);
+   }
+
+    /**Appends the provided link object to the list of links. If the links object doesn't exist, then creates it
+     * @param {TBlueMarbleLink} link The link object data that is appended.
+    */
+    addLink(link: TBlueMarbleLink){
+        if(this.type !== "BM"){ return } // Only append if the stored object is in Blue Marble format
+        this.object = this.object as TBlueMarbleJSON
+        if(!this.object.links){ // Create links if it doesn't exist
+            this.object.links = [link];
+            return;
+        }
+        this.object.links.push(link);
+   }
+
     /** Takes in paramaters used to modify or filter data to create a desired subset of data, ready to be exported
      * @param {number[] | undefined} templateIndexes A list of indexes representing which templates to export, if omitted exports all templates, if empty exports none
      * @param {number[] | undefined} linkIndexes A list of indexes representing which links to export, if omitted exports all links, if empty exports none
@@ -144,26 +186,6 @@ export default class DataManager {
             
         }
     }
-    /**Updates the stored object whilst making sure the type matches
-     * @param {Schemas} data The data used to update the stored object
-     */
-    update(data: Schemas){
-        if(BlueMarbleJSON.safeParse(data).success){this.type = "BM"}
-        else if(CharityJSON.safeParse(data).success){this.type = "CHA"}
-        else {return} // If it doesn't match any known schema, then disregard the data
-        this.object = data;
-    }
-    /**Gets the stored object */
-    get(): Schemas | undefined{
-        return this.object;
-    }
-
-    /**Gets the stored type of the stored object 
-     * @returns A string representing the type of schema / format (see types.ts)
-    */
-   getType(): SchemaTypeNames{
-    return this.type;
-   }
 }
 
 /** Converts an object in the format of any schema into the format of Blue Marble's schema
