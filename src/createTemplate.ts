@@ -79,7 +79,7 @@ export function initCreateTemplate(){
     // Add event listener hooks
     window.charity.game.map.on("click", (e)=>{
         console.log(e)
-        lngLat = e.lngLat;
+        lngLat = e.lngLat as {lat: number, lng: number};
         console.log(e.lngLat)
         zoomLevel = window.charity.game.map.getZoom();
         console.log("test")

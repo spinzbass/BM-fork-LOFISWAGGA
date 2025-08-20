@@ -161,7 +161,7 @@ if (!isGitHub) {
 // Adds the banner
 fs.writeFileSync(
   'dist/index.js', 
-  "(function (){ return ({ patches: [], load: () => {" + resultTerser.code + "},});})();", 
+  "(function (){ return ({ patches: [], load: () => {" + resultEsbuildJS.text + "},});})();", 
   'utf8'
 );
 fs.writeFileSync('src/main.ts', originalCode)
