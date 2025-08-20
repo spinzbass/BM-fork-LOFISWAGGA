@@ -70,7 +70,7 @@ function createTemplate(){
 export function initCreateTemplate(){
     // Add event listener hooks
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
-    console.log("coordsBtn: ",coordsBtn)
+    console.log("coordsBtn: ",coordsBtn, coordsBtn?.nodeName)
     if(coordsBtn && coordsBtn.nodeName.toLocaleUpperCase() === "INPUT"){
         coordsBtn.addEventListener("click", ()=>{console.log("test");getCoords()})
     }
