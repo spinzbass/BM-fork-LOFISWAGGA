@@ -1,8 +1,13 @@
 import { TBlueMarbleTemplate } from "../types/schemas";
 import { dataManager } from "./main";
+import UIManager from "./uiManager";
 import { generateUUID } from "./utils";
 
 let selectedFile: Blob = new Blob()
+
+function close(){
+    UIManager.close("bm-create-template")
+}
 
 function getCoords(): number[]{
     // Get coordinates of clicked on pixel

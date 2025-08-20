@@ -1,7 +1,13 @@
 import { TBlueMarbleJSON } from "../types/schemas";
 import { Schemas } from "../types/types";
 import { dataManager } from "./main";
+import UIManager from "./uiManager";
 import { createElementWithAttributes, download } from "./utils";
+
+function close(){
+    UIManager.close("bm-manage-templates")
+}
+
 let tableBody = document.querySelector("#bm-manage-templates table");
 if(tableBody && tableBody.nodeName.toLocaleUpperCase() === "TABLE"){
     tableBody = tableBody.children[0];

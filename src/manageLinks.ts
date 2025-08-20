@@ -3,6 +3,11 @@ import { Schemas } from "../types/types";
 import { dataManager } from "./main";
 import { download } from "./utils";
 import { TBlueMarbleJSON } from "../types/schemas";
+import UIManager from "./uiManager";
+
+function close(){
+    UIManager.close("bm-manage-links")
+}
 
 function createTableRows(){
     let tableBody = document.querySelector("#bm-manage-links table");
@@ -17,8 +22,6 @@ function createTableRows(){
 }
 let exportTemplateIndexes: number[] = []
 
-const ErrorText = document.querySelector("#bm-manage-links #error-text")
-
 function save(){
     let urlInput = document.querySelector("#bm-manage-links #url");
     if(!urlInput || urlInput.nodeName.toLocaleUpperCase() !== "INPUT"){ return };
@@ -29,9 +32,7 @@ function save(){
 
         reload()
     }catch(err){
-        if(ErrorText){
-            ErrorText.textContent = "Provided input is not a valid URL" // Transform to Toast
-        }
+        window.charity.lib.sonner.toast.error("The URL provided is not a valid URL")
     }
 }
 
