@@ -1,4 +1,5 @@
 export function createElementWithAttributes<T extends keyof HTMLElementTagNameMap>(tagName: T, attributes?: Record<string, string>): HTMLElement{
+
     const elem = document.createElement(tagName);
     if(attributes) {
         Object.entries(attributes).forEach(([attr, value])=>{
@@ -6,10 +7,12 @@ export function createElementWithAttributes<T extends keyof HTMLElementTagNameMa
             else elem.setAttribute(attr, value);
         })
     }
+
     return elem;
 }
 
 export function download(data: any){
+
     try {
         const jsonString = JSON.stringify(data);
         const blob = new Blob([jsonString], { type: "application/json" });
@@ -25,6 +28,8 @@ export function download(data: any){
 }
 
 export function generateUUID(): string{
+
     // Add actual uuid logic
+    
     return "balahajaa";
 }

@@ -17,15 +17,17 @@ export default class UIManager{
 
     /**Hides the "window" with the corresponding id */
     close(windowName : WindowNames){
+
         const bmWindow = document.querySelector(windowName);
         if(bmWindow){ (bmWindow as HTMLElement).style.display = "none" }
     }
     /**Displays the "window" with the corresponding id */
     open(windowName: WindowNames){
+        
         const bmWindow = document.querySelector(windowName);
         if(bmWindow){
             (bmWindow as HTMLElement).style.display = DISPLAY_DEFAULTS[windowName]
-            this.updateFunctions[windowName] && this.updateFunctions[windowName]()
+            this.updateFunctions[windowName] && this.updateFunctions[windowName]() // If the window has a UI update function, update the UI when opening the window
         }
     }
 }

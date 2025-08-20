@@ -57,6 +57,7 @@ if(tableBody && tableBody.nodeName.toLocaleUpperCase() === "TABLE"){
 }
 
 function createTableRows(){
+
     let tableBody = document.querySelector("#bm-manage-templates table");
     if(tableBody && tableBody.nodeName.toLocaleUpperCase() === "TABLE"){
         tableBody = tableBody.children[0];
@@ -68,16 +69,20 @@ function createTableRows(){
 }
 
 let exportTemplateIndexes: number[] = []
+
 function enabledToggle(id: number){
+
     let temp = dataManager.get() as Schemas
     temp = {
         ...temp,
         templates: temp.templates.map((template, i)=> i === id ? {...template, enabled: !template.enabled} : template)
     }
     dataManager.update(temp)
+
     // Enable / disable template in overlay
 }
 function exportToggle(id: number){
+
     if(exportTemplateIndexes.includes(id)){
         exportTemplateIndexes = exportTemplateIndexes.filter((x)=>x===id);
         return;
@@ -88,26 +93,35 @@ function shareTemplate(id: number){
     dataManager.getExportableData([id], []) // make link from this data
 }
 function deleteTemplate(id: number){
+
     let temp = dataManager.get() as Schemas
     temp.templates.splice(id,1);
     dataManager.update(temp)
+
     reload()
 }
 function shiftUp(id: number){
+
     let temp = dataManager.get() as Schemas
     if(id >= temp.templates.length){return}
+
     [temp.templates[id], temp.templates[id+1]] = [temp.templates[id+1], temp.templates[id]]
     dataManager.update(temp);
+
     reload()
 }
 function shiftDown(id: number){
+
     let temp = dataManager.get() as Schemas
     if(id >= temp.templates.length){return}
+
     [temp.templates[id], temp.templates[id-1]] = [temp.templates[id-1], temp.templates[id]]
     dataManager.update(temp);
+
     reload()
 }
 function exportAll(){
+
     if(dataManager.getType() !== "BM"){ return }
     download(dataManager.getExportableData(undefined, []))
 }
@@ -115,6 +129,7 @@ function exportSelected(){
     download(dataManager.getExportableData(exportTemplateIndexes, []))
 }
 function reload(){
+    
     exportTemplateIndexes = [];
     createTableRows();
     // Reload templates

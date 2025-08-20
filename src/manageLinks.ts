@@ -8,6 +8,7 @@ function close(){
 }
 
 function createTableRows(){
+
     let tableBody = document.querySelector("#bm-manage-links table");
     if(tableBody && tableBody.nodeName.toLocaleUpperCase() === "TABLE"){
         tableBody = tableBody.children[0];
@@ -18,9 +19,9 @@ function createTableRows(){
         }
     }
 }
-let exportTemplateIndexes: number[] = []
 
 function save(){
+
     let urlInput = document.querySelector("#bm-manage-links #url");
     if(!urlInput || urlInput.nodeName.toLocaleUpperCase() !== "INPUT"){ return };
 
@@ -46,11 +47,7 @@ function cancel(){
     }
 }
 
-function reload(){
-    exportTemplateIndexes = [];
-    createTableRows();
-    // Reload templates
-}
+let exportTemplateIndexes: number[] = []
 
 function exportToggle(id: number){
     if(exportTemplateIndexes.includes(id)){
@@ -63,21 +60,32 @@ function exportToggle(id: number){
 function shiftUp(id: number){
     let temp = dataManager.get() as Schemas
     if(id >= temp.templates.length){return}
+
     [temp.templates[id], temp.templates[id+1]] = [temp.templates[id+1], temp.templates[id]]
     dataManager.update(temp);
+
     reload()
 }
 
 function shiftDown(id: number){
     let temp = dataManager.get() as Schemas
     if(id >= temp.templates.length){return}
+
     [temp.templates[id], temp.templates[id-1]] = [temp.templates[id-1], temp.templates[id]]
     dataManager.update(temp);
+
     reload()
 }
 
 function exportSelected(){
     download(dataManager.getExportableData(exportTemplateIndexes, []))
+}
+
+function reload(){
+    
+    exportTemplateIndexes = [];
+    createTableRows();
+    // Reload templates
 }
 
 export function initManageLinks(){

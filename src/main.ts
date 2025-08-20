@@ -30,6 +30,7 @@ export const dataManager = new DataManager(DUMMY_DATA);
 export const uiManager = new UIManager();
 
 function initialiseWindows(){
+    
     initManageTemplates();
     initManageLinks();
     initCreateTemplate();

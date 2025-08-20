@@ -16,13 +16,15 @@ export default class DataManager {
 
     private type: SchemaTypeNames; // String variable representing the type / schema of the stored object
 
-        /**Updates the stored object whilst making sure the type matches
+    /**Updates the stored object whilst making sure the type matches
      * @param {Schemas} data The data used to update the stored object
      */
     update(data: Schemas){
+
         if(BlueMarbleJSON.safeParse(data).success){this.type = "BM"}
         else if(CharityJSON.safeParse(data).success){this.type = "CHA"}
         else {return} // If it doesn't match any known schema, then disregard the data
+
         this.object = data;
     }
     /**Gets the stored object */
@@ -39,7 +41,9 @@ export default class DataManager {
 
     /** Converts the current object in the format of any schema into the format of Charity's schema */
     toCharitySchema(){
-        if(this.type === "N/A" || this.type === "CHA"){return;} // If the schema type is unknown or already correct, don't do any conversions
+
+        if(this.type === "N/A" || this.type === "CHA"){ return } // If the schema type is unknown or already correct, don't do any conversions
+
         if(this.type === "BM"){
             this.object = this.object as TBlueMarbleJSON; // Type is BM so treat the object as a Blue Marble object
             this.object = {
@@ -66,12 +70,15 @@ export default class DataManager {
                 blacklist: [],
             };
         }
+
         this.type = "CHA"; // Update the type to match
     }
 
     /** Converts the current object in the format of any schema into the format of Blue Marble's schema */
     toBlueMarbleSchema(){
-        if(this.type === "N/A" || this.type === "BM"){return;} // If the schema type is unknown or already correct, don't do any conversions
+
+        if(this.type === "N/A" || this.type === "BM"){ return } // If the schema type is unknown or already correct, don't do any conversions
+
         if(this.type === "CHA"){
             this.object = this.object as TCharityJSON; // Type is CHA so treat the object as a Charity object
             this.object = {
@@ -89,6 +96,7 @@ export default class DataManager {
                 }))
             }
         }
+
         this.type = "BM"; // Update the type to match
     }
 
@@ -96,8 +104,10 @@ export default class DataManager {
      * @param {Schemas} object Object from which the appended data is taken
     */
     appendData(object: Schemas){
+
         if(this.type !== "BM"){ return; }; // Only append object if the stored object is in Blue Marble's format
         this.object = this.object as TBlueMarbleJSON
+
         // If the provided object is in Charity's format
         if(CharityJSON.parse(object)){
             // Then we have to convert the template data to Blue Marble's format and then append the data
@@ -112,6 +122,7 @@ export default class DataManager {
                 uuid: template.uuid // UUID to distinguish templates made by the same author
             })))
         }
+
         // If the object is already in Blue Marble's format
         else if(BlueMarbleJSON.parse(object)){
             // Then just append the data, no format change necessary
@@ -126,6 +137,7 @@ export default class DataManager {
      * @param {TBlueMarbleTemplate} template The template data that is appended.
     */
     addTemplate(template: TBlueMarbleTemplate){
+
         if(this.type !== "BM"){ return } // Only append if the stored object is in Blue Marble format
         (this.object as TBlueMarbleJSON).templates.push(template);
    }
@@ -134,12 +146,15 @@ export default class DataManager {
      * @param {TBlueMarbleLink} link The link object data that is appended.
     */
     addLink(link: TBlueMarbleLink){
+
         if(this.type !== "BM"){ return } // Only append if the stored object is in Blue Marble format
         this.object = this.object as TBlueMarbleJSON
+
         if(!this.object.links){ // Create links if it doesn't exist
             this.object.links = [link];
             return;
         }
+
         this.object.links.push(link);
    }
 
@@ -149,9 +164,12 @@ export default class DataManager {
      * @returns {Schemas | undefined} An object matching the provided parameters. If the stored object is undefined then so is the returned value
      */
     getExportableData(templateIndexes?: number[], linkIndexes?: number[]): Schemas | null{
+
         if(this.type === "N/A") { return null} // Return nothing if the type of the stored object is unknown
+
         if((this.object as Schemas).hasOwnProperty("links")){
             const typedCopy = this.object as Schemas & {links: any[]}
+
             return {
                 ...typedCopy,
                 // Gets an array of templates at the given indexes (provided the index has a correct value)
@@ -172,7 +190,9 @@ export default class DataManager {
                 : typedCopy.links
             }
         }
+
         const typedCopy = this.object as Schemas
+
         return {
             ...typedCopy,
             // Gets an array of templates at the given indexes (provided the index has a correct value)
@@ -192,7 +212,9 @@ export default class DataManager {
  * @param {Schemas} object The object that is converted
  */
 function toBlueMarbleSchema(object: Schemas): TBlueMarbleJSON{
+
     if(BlueMarbleJSON.parse(object)){ return object as TBlueMarbleJSON }
+
     if(CharityJSON.parse(object)){
         object = object as TCharityJSON
         return {
@@ -210,6 +232,7 @@ function toBlueMarbleSchema(object: Schemas): TBlueMarbleJSON{
                 }))
         }
     }
+
     return object as TBlueMarbleJSON
 }
 
@@ -217,7 +240,9 @@ function toBlueMarbleSchema(object: Schemas): TBlueMarbleJSON{
  * @param {Schemas} object The object that is converted.
  */
 function toCharitySchema(object: Schemas): TCharityJSON{
+
     if(CharityJSON.parse(object)){ return object as TCharityJSON}
+
     if(BlueMarbleJSON.parse(object)){
         object = object as TBlueMarbleJSON
         return {
@@ -244,5 +269,6 @@ function toCharitySchema(object: Schemas): TCharityJSON{
                 blacklist: [],
             };
     }
+    
     return object as TCharityJSON
 }
