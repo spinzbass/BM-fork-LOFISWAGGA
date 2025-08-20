@@ -1,12 +1,10 @@
-import { ur } from "zod/v4/locales";
 import { Schemas } from "../types/types";
-import { dataManager } from "./main";
+import { dataManager, uiManager } from "./main";
 import { download } from "./utils";
 import { TBlueMarbleJSON } from "../types/schemas";
-import UIManager from "./uiManager";
 
 function close(){
-    UIManager.close("bm-manage-links")
+    uiManager.close("bm-manage-links")
 }
 
 function createTableRows(){
@@ -80,4 +78,8 @@ function shiftDown(id: number){
 
 function exportSelected(){
     download(dataManager.getExportableData(exportTemplateIndexes, []))
+}
+
+export function initManageLinks(){
+    // Add event listener hooks
 }

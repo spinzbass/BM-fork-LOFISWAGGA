@@ -1,11 +1,10 @@
 import { TBlueMarbleJSON } from "../types/schemas";
 import { Schemas } from "../types/types";
-import { dataManager } from "./main";
-import UIManager from "./uiManager";
+import { dataManager, uiManager } from "./main";
 import { createElementWithAttributes, download } from "./utils";
 
 function close(){
-    UIManager.close("bm-manage-templates")
+    uiManager.close("bm-manage-templates")
 }
 
 let tableBody = document.querySelector("#bm-manage-templates table");
@@ -119,4 +118,8 @@ function reload(){
     exportTemplateIndexes = [];
     createTableRows();
     // Reload templates
+}
+
+export function initManageTemplates(){
+    // Add event listener hooks
 }

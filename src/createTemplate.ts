@@ -1,12 +1,11 @@
 import { TBlueMarbleTemplate } from "../types/schemas";
-import { dataManager } from "./main";
-import UIManager from "./uiManager";
+import { dataManager, uiManager } from "./main";
 import { generateUUID } from "./utils";
 
 let selectedFile: Blob = new Blob()
 
 function close(){
-    UIManager.close("bm-create-template")
+    uiManager.close("bm-create-template")
 }
 
 function getCoords(): number[]{
@@ -59,4 +58,8 @@ function createTemplate(){
     const data = getFormData();
     if(!data){ return }
     dataManager.addTemplate(data);
+}
+
+export function initCreateTemplate(){
+    // Add event listener hooks
 }

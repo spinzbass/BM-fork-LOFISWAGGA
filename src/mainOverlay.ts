@@ -1,13 +1,17 @@
-import UIManager from "./uiManager";
+import { uiManager } from "./main";
 
 function close(){
-    UIManager.close("bm-main-overlay")
+    uiManager.close("bm-main-overlay")
 }
 
 function openManTemplates(){
-    UIManager.open("bm-manage-templates")
+    uiManager.open("bm-manage-templates")
 }
 
 function openManLinks(){
-    UIManager.open("bm-manage-links")
+    uiManager.open("bm-manage-links")
+}
+
+export function initMainOverlay(){
+    // Add event listener hooks
 }

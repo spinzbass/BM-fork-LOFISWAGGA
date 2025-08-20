@@ -1,6 +1,12 @@
+import { EMPTY_BLUE_MARBLE } from "../types/schemas.ts";
+import { initCreateTemplate } from "./createTemplate.ts";
 import DataManager from "./dataManager.ts";
+import { initMainOverlay } from "./mainOverlay.ts";
+import { initManageLinks } from "./manageLinks.ts";
+import { initManageTemplates } from "./manageTemplates.ts";
+import UIManager from "./uiManager.ts";
 
-export const dataManager = new DataManager({
+const DUMMY_DATA = {
     whoami: "BlueMarble",
     schemaVersion: "",
     templates: [
@@ -17,4 +23,17 @@ export const dataManager = new DataManager({
             uuid: "BLAJSIAFBNIUBAWIFIOANWA",
         }
     ]
-});
+}
+export const dataManager = new DataManager(DUMMY_DATA);
+// export const dataManager = new DataManager(EMPTY_BLUE_MARBLE);
+
+export const uiManager = new UIManager();
+
+function initialiseWindows(){
+    initManageTemplates();
+    initManageLinks();
+    initCreateTemplate();
+    initMainOverlay();
+}
+
+initialiseWindows()
