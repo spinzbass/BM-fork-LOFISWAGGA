@@ -30,7 +30,7 @@ function setCoords(){
     });
 }
 
-function getFormData(): TBlueMarbleTemplate | undefined{
+function getNewTemplateData(): TBlueMarbleTemplate | undefined{
 
     const coordsContainer = document.querySelector("#bm-create-template #coords-container");
     if(!coordsContainer){ return }
@@ -54,14 +54,14 @@ function getFormData(): TBlueMarbleTemplate | undefined{
         enabled: true,
         uuid: generateUUID(),
         name: (nameInput as HTMLInputElement).value,
-        authorID: 0, // Add getting the actual author id
+        authorID: charity.game.user.data ? charity.game.user.data.id : -1, // Use id -1 if userData doesn't exist (user isn't logged in)
         urlLink: "" // MAKE DATA URL!!
     }
 }
 
 function createTemplate(){
 
-    const data = getFormData();
+    const data = getNewTemplateData();
     if(!data){ return }
     dataManager.addTemplate(data);
 }
