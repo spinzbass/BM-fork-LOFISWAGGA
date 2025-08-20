@@ -76,8 +76,8 @@ export function initCreateTemplate(){
         console.log(e)
         lngLat = e.lngLat;
         zoomLevel = window.charity.game.map.getZoom();
+        setCoords()
     })
-    setCoords()
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
     console.log("coordsBtn: testestsetestseesseetestest ",coordsBtn)
     console.log(coordsBtn?.nodeName)
