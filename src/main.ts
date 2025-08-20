@@ -29,6 +29,14 @@ export const dataManager = new DataManager(DUMMY_DATA);
 
 export const uiManager = new UIManager();
 
+const params = new URLSearchParams(document.location.search);
+if(params.has("bmShare")){
+    try{
+        const json = JSON.parse(params.get("bmShare")!)
+        dataManager.appendData(json)
+    }catch{}
+}
+
 function initialiseWindows(){
     
     initManageTemplates();
