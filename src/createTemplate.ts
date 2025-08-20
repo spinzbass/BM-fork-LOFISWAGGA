@@ -11,7 +11,7 @@ function close(){
 function getCoords(): number[]{
 
     console.log("test")
-    window.charity.game.map.on("click", "", (e)=>{console.log(e)})
+    window.charity.game.map.on("click", (e)=>{console.log(e)})
     return []
 }
 
