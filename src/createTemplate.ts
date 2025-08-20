@@ -72,6 +72,6 @@ export function initCreateTemplate(){
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
     console.log("coordsBtn: ",coordsBtn)
     if(coordsBtn && coordsBtn.nodeName.toLocaleUpperCase() === "INPUT"){
-        coordsBtn.addEventListener("click", getCoords)
+        coordsBtn.addEventListener("click", ()=>{console.log("test");getCoords()})
     }
 }
