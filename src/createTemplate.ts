@@ -11,7 +11,6 @@ function close(){
 function getCoords(): number[]{
 
     console.log("test")
-    window.charity.game.map.on("click", (e)=>{console.log(e)})
     return []
 }
 
@@ -70,6 +69,7 @@ function createTemplate(){
 export function initCreateTemplate(){
     // Add event listener hooks
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
+    window.charity.game.map.on("click", (e)=>{console.log(e)})
     console.log("coordsBtn: testestsetestseesseetestest ",coordsBtn)
     console.log(coordsBtn?.nodeName)
     console.log(coordsBtn?.nodeName.toLocaleUpperCase() === "BUTTON")
