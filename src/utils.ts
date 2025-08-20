@@ -23,3 +23,8 @@ export function download(data: any){
         console.error("An error occurded while exporting the templates: ", err);
     }
 }
+
+export function generateUUID(): string{
+    // Add actual uuid logic
+    return "balahajaa";
+}

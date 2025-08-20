@@ -25,14 +25,7 @@ function save(){
 
     try{
         const url = new URL((urlInput as HTMLInputElement).value);
-        if(dataManager.getType() !== "BM"){ dataManager.toBlueMarbleSchema() }
-        const temp = dataManager.get() as TBlueMarbleJSON;
-        dataManager.update({
-            ...temp,
-            links: [{
-                url: url.toString(),
-            }]
-        })
+        dataManager.addLink({ url: url.toString() })
 
         reload()
     }catch(err){

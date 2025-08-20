@@ -1,13 +1,17 @@
 <!-- body -->
   <div id="bm-create-template">
-    <h1>Create new template</h1>
+    <header>
+      <div id="bm-bar-drag"></div>
+      <h1>Create new template</h1>
+      <button id="close"><!-- Add cross icon --></button>
+    </header>
     <hr />
     <form>
         <label>
             Name:
             <input type="text" id="name"/>
         </label>
-        <div id="coords">
+        <div id="coords-container">
             <button type="button" id="coords">Get coords from pixel</button>
             <input type="text">
             <input type="text">
