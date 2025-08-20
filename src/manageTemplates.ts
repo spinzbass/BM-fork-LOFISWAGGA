@@ -129,12 +129,13 @@ function exportSelected(){
     download(dataManager.getExportableData(exportTemplateIndexes, []))
 }
 function reload(){
-    
+
     exportTemplateIndexes = [];
     createTableRows();
     // Reload templates
 }
 
 export function initManageTemplates(){
+    
     // Add event listener hooks
 }

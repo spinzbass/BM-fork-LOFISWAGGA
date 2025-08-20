@@ -3,22 +3,25 @@ import { dataManager, uiManager } from "./main";
 import { generateUUID } from "./utils";
 
 let selectedFile: Blob = new Blob()
+let lngLat: { lng: number; lat: number; }
+let zoomLevel: number | null = null;
 
 function close(){
     uiManager.close("bm-create-template")
 }
 
 function getCoords(): number[]{
-
-    console.log("test")
-    return []
+    if(!(lngLat && zoomLevel)){ window.charity.lib.sonner.toast.error("You must select a pixel first") }
+    const tilePixel = window.charity.game.mercator.latLonToTileAndPixel(lngLat.lat, lngLat.lng, zoomLevel!)
+    return [...tilePixel.tile, ...tilePixel.pixel]
 }
 
 function setCoords(){
-
+    
+    const coords = getCoords();
+    console.log(coords)
     const coordsContainer = document.querySelector("#bm-create-template #coords-container");
     if(!coordsContainer){ return }
-    const coords = getCoords();
     if(coords.length < 4){ return }
 
     let index = 0;
@@ -67,7 +70,13 @@ function createTemplate(){
 }
 
 export function initCreateTemplate(){
+
     // Add event listener hooks
+    window.charity.game.map.on("click", (e)=>{
+        console.log(e)
+        lngLat = e.lngLat;
+        zoomLevel = window.charity.game.map.getZoom();
+    })
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
     console.log("coordsBtn: testestsetestseesseetestest ",coordsBtn)
     console.log(coordsBtn?.nodeName)

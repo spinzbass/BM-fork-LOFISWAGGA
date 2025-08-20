@@ -6,8 +6,6 @@ import { initManageLinks } from "./manageLinks.ts";
 import { initManageTemplates } from "./manageTemplates.ts";
 import UIManager from "./uiManager.ts";
 
-window.charity.game.map.on("click", (e)=>{console.log(e)})
-
 const DUMMY_DATA = {
     whoami: "BlueMarble",
     schemaVersion: "",
