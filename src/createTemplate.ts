@@ -77,11 +77,12 @@ export function initCreateTemplate(){
         lngLat = e.lngLat;
         zoomLevel = window.charity.game.map.getZoom();
     })
+    setCoords()
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
     console.log("coordsBtn: testestsetestseesseetestest ",coordsBtn)
     console.log(coordsBtn?.nodeName)
     console.log(coordsBtn?.nodeName.toLocaleUpperCase() === "BUTTON")
     if(coordsBtn && coordsBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
-        coordsBtn.addEventListener("click", ()=>{console.log("test");getCoords()})
+        coordsBtn.addEventListener("click", ()=>{console.log("test");setCoords()})
     }
 }
