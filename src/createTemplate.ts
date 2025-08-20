@@ -80,7 +80,7 @@ export function initCreateTemplate(){
     window.charity.game.map.on("click", (e)=>{
         console.log(e)
         lngLat = e.lngLat;
-        console.log(lngLat)
+        console.log(e.lngLat)
         zoomLevel = window.charity.game.map.getZoom();
         console.log("test")
         setCoords()
