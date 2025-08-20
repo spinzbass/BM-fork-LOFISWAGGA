@@ -12,7 +12,9 @@ function close(){
 
 function getCoords(): number[]{
     if(!(lngLat && zoomLevel)){ window.charity.lib.sonner.toast.error("You must select a pixel first") }
+    console.log("test")
     const tilePixel = window.charity.game.mercator.latLonToTileAndPixel(lngLat.lat, lngLat.lng, zoomLevel!)
+    console.log("test")
     return [...tilePixel.tile, ...tilePixel.pixel]
 }
 
