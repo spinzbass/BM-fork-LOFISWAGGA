@@ -10,7 +10,7 @@ function close(){
 
 function getCoords(): number[]{
 
-    // Get coordinates of clicked on pixel
+    window.charity.game.map.on("click", "", (e)=>{console.log(e)})
     return []
 }
 
@@ -68,4 +68,8 @@ function createTemplate(){
 
 export function initCreateTemplate(){
     // Add event listener hooks
+    const coordsBtn = document.querySelector("#bm-create-template button#coords");
+    if(coordsBtn && coordsBtn.nodeName.toLocaleUpperCase() === "INPUT"){
+        coordsBtn.addEventListener("click", getCoords)
+    }
 }

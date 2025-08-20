@@ -14,7 +14,6 @@ import fs from "fs";
 import { execSync } from "child_process";
 import { consoleStyle } from "./utils.js";
 import { createRequire } from "module";
-import { minify } from "html-minifier-terser";
 const require = createRequire(import.meta.url);
 // CommonJS imports (require)
 const terser = require("terser");
