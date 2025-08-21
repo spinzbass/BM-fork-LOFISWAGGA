@@ -90,7 +90,15 @@ function exportToggle(id: number){
     exportTemplateIndexes.push(id)
 }
 function shareTemplate(id: number){
-    dataManager.getExportableData([id], []) // make link from this data
+    try{
+        const string = JSON.stringify(dataManager.getExportableData([id], []));
+        const windowURL = window.location.origin + window.location.pathname;
+        const searchParams = new URLSearchParams();
+        searchParams.set("bmShare", string);
+        navigator.clipboard.writeText(windowURL+searchParams.toString());
+        window.charity.lib.sonner.toast.success("Share link copied to clipboard")
+    }
+    catch{ window.charity.lib.sonner.toast.error("Creating share link failed") }
 }
 function deleteTemplate(id: number){
 

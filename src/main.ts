@@ -6,6 +6,8 @@ import { initManageLinks } from "./manageLinks.ts";
 import { initManageTemplates } from "./manageTemplates.ts";
 import UIManager from "./uiManager.ts";
 
+import "@placecharity/framework-types"
+
 const DUMMY_DATA = {
     whoami: "BlueMarble",
     schemaVersion: "",
