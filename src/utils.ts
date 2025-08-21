@@ -1,3 +1,5 @@
+import { dataManager } from "./main";
+
 export function createElementWithAttributes<T extends keyof HTMLElementTagNameMap>(tagName: T, attributes?: Record<string, string>): HTMLElement{
 
     const elem = document.createElement(tagName);
@@ -29,7 +31,12 @@ export function download(data: any){
 
 export function generateUUID(): string{
 
-    // Add actual uuid logic
+    let uuid = crypto.randomUUID();
+    if(dataManager.get()){
+        while(dataManager.get()?.templates.some((template)=>{template.uuid==uuid})){
+            uuid = crypto.randomUUID()
+        }
+    }
     
-    return "balahajaa";
+    return uuid;
 }
