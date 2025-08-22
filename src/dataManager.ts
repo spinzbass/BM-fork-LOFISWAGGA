@@ -133,6 +133,41 @@ export default class DataManager {
         }
     }
 
+
+    appendDataFromURL(data: TBlueMarbleJSON, url: string) {
+        if(this.type !== "BM") { return };
+        this.object = this.object as TBlueMarbleJSON
+
+        const importedTemplates = data.templates;
+        // Set the template origins
+        importedTemplates?.map((template: TBlueMarbleTemplate) => ({ ...template, originLink: url }));
+        const templatesCopy = this.object.templates;
+        let removed = 0;
+    
+        for(const [i, template] of this.object.templates.entries()){
+            if(importedTemplates.length === 0){ break; }
+            if(template.originLink !== url){ continue }
+    
+            const idx = importedTemplates.findIndex((elem)=>elem.authorID === template.authorID && elem.uuid === template.uuid);
+            if(idx !== -1){
+                // If the imported data has this template remove it to not loop over it anymore and not append it later
+                importedTemplates.splice(idx,1);
+            }else{
+                // If the imported data doesn't have this template, remove it from the templates list
+                templatesCopy.splice(removed+i, 1)
+                removed++; // Add a removed counter to not mess up indexing
+            }
+        }
+    
+        if(importedTemplates.length !== 0){
+            // Append imported templates that weren't already in the templates array
+            templatesCopy.push(...importedTemplates);
+        }
+    
+        // Update the stored object's templates with the new array
+        this.object.templates = templatesCopy;
+    }
+
     /**Appends the provided template to the list of templates.
      * @param {TBlueMarbleTemplate} template The template data that is appended.
     */
