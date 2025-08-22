@@ -77,7 +77,7 @@ export const BlueMarbleLink = z.object({
 })
 
 export const BlueMarbleJSON = z.object({
-  whoami: z.string(), // Identifies the type of JSON format
+  whoami: z.string().refine((whoami)=>whoami.includes("BlueMarble")), // Identifies the type of JSON format
   scriptVersion: z
     .string()
     .refine((version) => version.match("^0|([1-9]\d*)([.](0|([1-9]\d*))){2}$"))
