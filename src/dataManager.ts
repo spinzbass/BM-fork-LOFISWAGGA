@@ -26,6 +26,8 @@ export default class DataManager {
         else {return} // If it doesn't match any known schema, then disregard the data
 
         this.object = data;
+
+        this.store();
     }
     /**Gets the stored object */
     get(): Schemas | undefined{
@@ -35,9 +37,9 @@ export default class DataManager {
     /**Gets the stored type of the stored object 
      * @returns A string representing the type of schema / format (see types.ts)
     */
-   getType(): SchemaTypeNames{
-    return this.type;
-   }
+    getType(): SchemaTypeNames{
+        return this.type;
+    }
 
     /** Converts the current object in the format of any schema into the format of Charity's schema */
     toCharitySchema(){
@@ -131,6 +133,8 @@ export default class DataManager {
             if(!this.object.links){ this.object.links = object.links} // If the stored object doesn't have a links array yet, create / set it with the appended data
             else if(object.links){ this.object.links.push(...object.links) } // Check if appended data has a links array, otherwise the spread operator might cause errors or undefined behaviour
         }
+
+        this.store();
     }
 
 
@@ -167,6 +171,8 @@ export default class DataManager {
     
         // Update the stored object's templates with the new array
         this.object.templates = templatesCopy;
+    
+        this.store();
     }
 
     /**Appends the provided template to the list of templates.
@@ -176,7 +182,9 @@ export default class DataManager {
 
         if(this.type !== "BM"){ return } // Only append if the stored object is in Blue Marble format
         (this.object as TBlueMarbleJSON).templates.push(template);
-   }
+        
+        this.store();
+    }
 
     /**Appends the provided link object to the list of links. If the links object doesn't exist, then creates it
      * @param {TBlueMarbleLink} link The link object data that is appended.
@@ -192,6 +200,8 @@ export default class DataManager {
         }
 
         this.object.links.push(link);
+        
+        this.store();
    }
 
     /** Takes in paramaters used to modify or filter data to create a desired subset of data, ready to be exported
