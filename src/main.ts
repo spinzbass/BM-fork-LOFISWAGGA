@@ -26,10 +26,12 @@ const DUMMY_DATA = {
         }
     ]
 }
-export const dataManager = new DataManager(DUMMY_DATA);
-// export const dataManager = new DataManager(EMPTY_BLUE_MARBLE_JSON);
+const storageData: TBlueMarbleJSON | undefined = DUMMY_DATA // data should be data gotten from storage
 
+export const dataManager = new DataManager(storageData);
+// export const dataManager = new DataManager(EMPTY_BLUE_MARBLE_JSON);
 export const uiManager = new UIManager();
+
 
 const params = new URLSearchParams(document.location.search);
 if (params.has("bmShare")) {
@@ -39,20 +41,20 @@ if (params.has("bmShare")) {
     } catch { }
 }
 
-function importFromURL(url: string){
-    
-    const data = EMPTY_BLUE_MARBLE_JSON; // data should be the data fetched from the URL
-    
-    dataManager.toBlueMarbleSchema();
-    if(dataManager.getType() !== "BM"){
-        dataManager.update(EMPTY_BLUE_MARBLE_JSON)
-    }
-    
-    dataManager.appendDataFromURL(data, url);
+dataManager.toBlueMarbleSchema();
+if(dataManager.getType() !== "BM"){
+    dataManager.update(EMPTY_BLUE_MARBLE_JSON)
+}
+else if((dataManager.get() as TBlueMarbleJSON).links){
+    (dataManager.get() as TBlueMarbleJSON).links?.forEach(link => {
+        // Imports data from every URL in the stored object
+        importFromURL(link.url);
+    })
 }
 
-function initialiseWindows() {
 
+function initialiseWindows() {
+    
     initManageTemplates();
     initManageLinks();
     initCreateTemplate();
@@ -60,3 +62,11 @@ function initialiseWindows() {
 }
 
 initialiseWindows()
+
+/** Fetches data from a url and then updates the object stored in dataManager appropriately */
+function importFromURL(url: string){
+    
+    const data = EMPTY_BLUE_MARBLE_JSON; // data should be the data fetched from the URL
+
+    dataManager.appendDataFromURL(data, url);
+}

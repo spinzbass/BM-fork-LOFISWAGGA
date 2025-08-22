@@ -151,6 +151,7 @@ export default class DataManager {
             const idx = importedTemplates.findIndex((elem)=>elem.authorID === template.authorID && elem.uuid === template.uuid);
             if(idx !== -1){
                 // If the imported data has this template remove it to not loop over it anymore and not append it later
+                // We don't do anything in order to keep draw order
                 importedTemplates.splice(idx,1);
             }else{
                 // If the imported data doesn't have this template, remove it from the templates list
