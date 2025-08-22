@@ -54,8 +54,16 @@ function getNewTemplateData(): TBlueMarbleTemplate | undefined{
         }catch(err){}
     }
     });
-    if(coords.length !== 4){ return }
+    if(coords.length !== 4){
+        charity.lib.sonner.toast.error("Fill in all coord inputs"); 
+        return;
+    }
 
+    if(!selectedFile){ 
+        charity.lib.sonner.toast.error("Drag or upload an image");
+        return;
+    }
+    const dataURL = URL.createObjectURL(selectedFile);
 
     return {
         coords: coords,
@@ -63,7 +71,7 @@ function getNewTemplateData(): TBlueMarbleTemplate | undefined{
         uuid: generateUUID(),
         name: (nameInput as HTMLInputElement).value,
         authorID: charity.game.user.data ? charity.game.user.data.id : -1, // Use id -1 if userData doesn't exist (user isn't logged in)
-        urlLink: "" // MAKE DATA URL!!
+        urlLink: dataURL
     }
 }
 

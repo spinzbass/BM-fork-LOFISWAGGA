@@ -52,16 +52,11 @@ else if((dataManager.get() as TBlueMarbleJSON).links){
     })
 }
 
-
-function initialiseWindows() {
-    
-    initManageTemplates();
-    initManageLinks();
-    initCreateTemplate();
-    initMainOverlay();
-}
-
-initialiseWindows()
+// Call the initialisation functions of all the windows
+initManageTemplates();
+initManageLinks();
+initCreateTemplate();
+initMainOverlay();
 
 /** Fetches data from a url and then updates the object stored in dataManager appropriately */
 function importFromURL(url: string){
