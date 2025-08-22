@@ -48,7 +48,7 @@ export default class DataManager {
             this.object = this.object as TBlueMarbleJSON; // Type is BM so treat the object as a Blue Marble object
             this.object = {
                 meta:{
-                    whoami: "Charity", // Identifies the type of JSON format
+                    whoami: "BlueCharityPro", // Identifies the type of JSON format
                     schemaVersion: CHA_SCHEMA_VERSION,
                     scriptVersion: this.object.scriptVersion,
                 },
@@ -206,6 +206,12 @@ export default class DataManager {
             
         }
     }
+
+    store(){
+        if(this.type !== "BM"){ return; }
+        this.object = this.object as TBlueMarbleJSON
+        // Store logic
+    }
 }
 
 /** Converts an object in the format of any schema into the format of Blue Marble's schema
@@ -247,7 +253,7 @@ function toCharitySchema(object: Schemas): TCharityJSON{
         object = object as TBlueMarbleJSON
         return {
                 meta:{
-                    whoami: object.whoami, // Identifies the type of JSON format
+                    whoami: "BlueCharityPro", // Identifies the type of JSON format
                     schemaVersion: CHA_SCHEMA_VERSION,
                     scriptVersion: object.scriptVersion,
                 },
