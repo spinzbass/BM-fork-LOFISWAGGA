@@ -32,8 +32,9 @@ export function download(data: any){
 export function generateUUID(): string{
 
     let uuid = crypto.randomUUID();
+    const userID = window.charity.game.user.data?.id
     if(dataManager.get()){
-        while(dataManager.get()?.templates.some((template)=>{template.uuid==uuid})){
+        while(dataManager.get()?.templates.some((template)=>{template.authorID==userID && template.uuid==uuid})){
             uuid = crypto.randomUUID()
         }
     }
