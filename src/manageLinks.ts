@@ -1,6 +1,6 @@
 import { Schemas } from "../types/types";
 import { dataManager, uiManager } from "./main";
-import { download } from "./utils";
+import { createElementWithAttributes, download } from "./utils";
 import { TBlueMarbleJSON } from "../types/schemas";
 
 // Typescript / Javascript for the "manageTemplates" window
@@ -12,22 +12,6 @@ let exportTemplateIndexes: number[] = []
  */
 function close(){
     uiManager.close("bm-manage-links")
-}
-
-/**Creates the rows in the table and populates them with data from the stored object
- * @since 0.1.0-overhaul
- */
-function createTableRows(){
-
-    let tableBody = document.querySelector("#bm-manage-links table");
-    if(tableBody && tableBody.nodeName.toLocaleUpperCase() === "TABLE"){
-        tableBody = tableBody.children[0];
-        if(tableBody && dataManager.getType() === "BM"){
-            tableBody.innerHTML = "";
-            // Create TRs
-            // Remember to set the ones from the link object (if exists) and to set exportTemplateIndexes then too
-        }
-    }
 }
 
 /**Updates the link stored in the stored object with the one in the input
@@ -118,6 +102,66 @@ function exportSelected(){
     download(dataManager.getExportableData(exportTemplateIndexes, []))
 }
 
+/**Creates the rows in the table and populates them with data from the stored object
+ * @since 0.2.0-overhaul
+ */
+function createTableRows(){
+
+    const table = document.querySelector("#bm-manage-templates table");
+    if(table && table.nodeName.toLocaleUpperCase() === "TABLE"){
+        const tableBody = table.children[0];
+        if(tableBody && dataManager.getType() === "BM"){
+
+            // Reset the table body's contents
+            tableBody.innerHTML = "";
+
+            // Create the table rows and use them to populate the table body
+            (dataManager.get() as TBlueMarbleJSON).templates.forEach((template, i)=>{
+
+                // Create the first, main row
+                const row1 = createElementWithAttributes("tr", {id: "main-row"});
+                
+                // # field
+                const td1 = createElementWithAttributes("td", {textContent: i.toString()});
+                // Name field
+                const td2 = createElementWithAttributes("td", {textContent: template.name || "unnamed"});
+                // Export field 
+                const td3 = document.createElement("td");
+                const exportCheckBox = createElementWithAttributes("input", {
+                    id: "exportToggle",
+                    type: "checkbox",
+                    value: false,
+                });
+                exportCheckBox.addEventListener("change", ()=>exportToggle(i))
+                td3.appendChild(exportCheckBox);
+                // Shift template up / down buttons
+                const td4 = document.createElement("td");
+                const shiftsContainer = createElementWithAttributes("div", {className: "shifts-container"});
+                
+                const buttonUp = createElementWithAttributes("button", {
+                    id: "up",
+                    textContent: "&#x1F702;", // 🜂
+                });
+                buttonUp.addEventListener("click", ()=>shiftUp(i));
+
+                const buttonDown = createElementWithAttributes("button", {
+                    id: "down",
+                    textContent: "&#x1F704;" // 🜄
+                });
+                buttonDown.addEventListener("click", ()=>shiftDown(i));
+
+                shiftsContainer.append(buttonUp, buttonDown);
+                td4.appendChild(shiftsContainer);
+
+                // Append the table cells to the row
+                row1.append(td1, td2, td3, td4);
+
+                tableBody?.append(row1);
+            })
+        }
+    }
+}
+
 /**Updates the UI of this window
  * @since 0.1.0-overhaul
  */
@@ -132,5 +176,25 @@ function updateUI(){
  * @since 0.1.0-overhaul
 */
 export function initManageLinks(){
-    // Add event listener hooks
+    
+    // Try to get elements and connect the appropriate function to the onClick listener
+    const closeBtn = document.querySelector("#bm-manage-links button#close");
+    if(closeBtn && closeBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+        closeBtn.addEventListener("click", ()=>close());
+    }
+    const saveBtn = document.querySelector("#bm-manage-links button#save");
+    if(saveBtn && saveBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+        saveBtn.addEventListener("click", ()=>save())
+    }
+    const cancelBtn = document.querySelector("#bm-manage-links button#cancel");
+    if(cancelBtn && cancelBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+        cancelBtn.addEventListener("click", ()=>cancel())
+    }
+    createTableRows();
+    
+    // Try to get the export selected button and connect the appropriate function to the onClick listener
+    const exportSelectedBtn = document.querySelector("#bm-manage-links button#export-selected");
+    if(exportSelectedBtn && exportSelectedBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+        exportSelectedBtn.addEventListener("click", ()=>exportSelected())
+    }
 }

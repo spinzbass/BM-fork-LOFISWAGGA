@@ -134,7 +134,7 @@ function exportSelected(){
 }
 
 /**Creates the rows in the table and populates them with data from the stored object
- * @since 0.1.0-overhaul
+ * @since 0.2.0-overhaul
  */
 function createTableRows(){
 
@@ -142,6 +142,7 @@ function createTableRows(){
     if(table && table.nodeName.toLocaleUpperCase() === "TABLE"){
         const tableBody = table.children[0];
         if(tableBody && dataManager.getType() === "BM"){
+            
             // Reset the table body's contents
             tableBody.innerHTML = "";
 
@@ -245,6 +246,7 @@ function updateUI(){
  * @since 0.1.0-overhaul
 */
 export function initManageTemplates(){
+
     // Try to get elements and connect the appropriate function to the onClick listener
     const closeBtn = document.querySelector("#bm-manage-templates button#close");
     if(closeBtn && closeBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
