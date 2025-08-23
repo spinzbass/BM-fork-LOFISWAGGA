@@ -127,19 +127,27 @@ function createTemplate(){
 }
 
 /**Initialises this window's UI-related javascript (addEventListener hooks, ect)
- * @since 0.1.0-overhaul
+ * @since 0.2.0-overhaul
 */
 export function initCreateTemplate(){
 
-    // Add event listener hooks
-    // Update the clicked-on pixel variables whenver the user clicks on a pixel
+    // Update the clicked-on pixel variables whenever the user clicks on a pixel
     charity.game.map.on("click", (e)=>{
         lngLat = e.lngLat as {lat: number, lng: number};
         zoomLevel = charity.game.map.getZoom();
     })
 
+    // Try to get elements and connect the appropriate function to the onClick listener
+    const closeBtn = document.querySelector("#bm-create-template button#close");
+    if(closeBtn && closeBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+        closeBtn.addEventListener("click", ()=>close());
+    }
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
     if(coordsBtn && coordsBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
-        coordsBtn.addEventListener("click", ()=>{console.log("test");setCoords()})
+        coordsBtn.addEventListener("click", ()=>setCoords());
+    }
+    const createBtn = document.querySelector("#bm-create-template button#create");
+    if(createBtn && createBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+        createBtn.addEventListener("click", ()=>createTemplate());
     }
 }
