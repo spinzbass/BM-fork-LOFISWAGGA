@@ -23,9 +23,51 @@ function openManLinks(){
     uiManager.open("bm-manage-links")
 }
 
+/**Updates the values in this window's UI
+ * @since 0.2.0-overhaul
+ */
+function updateUI(){
+
+    if(!charity.game.user.data){ return }
+
+    // Try to get elements and set the appropriate text
+    const nameTD = document.querySelector("#bm-main-overlay td#name");
+    if(nameTD && nameTD.nodeName.toLocaleUpperCase() === "TD"){
+        nameTD.textContent = charity.game.user.data.name;
+    }
+    const dropletsTD = document.querySelector("#bm-main-overlay td#droplets")
+    if(dropletsTD && dropletsTD.nodeName.toLocaleUpperCase() === "TD"){
+        dropletsTD.textContent = charity.game.user.data.droplets.toString();
+    }
+    const levelTD = document.querySelector("#bm-main-overlay td#level");
+    if(levelTD && levelTD.nodeName.toLocaleUpperCase() === "TD"){
+        levelTD.textContent = charity.game.user.data.level.toString();
+    }
+}
+
+
 /**Initialises this window's UI-related javascript (addEventListener hooks, ect)
  * @since 0.1.0-overhaul
 */
 export function initMainOverlay(){
+
+    // Try to get the close button and connect the appropriate function to the onClick listener
+    const closeBtn = document.querySelector("#bm-main-overlay button#close");
+    if(closeBtn && closeBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+        closeBtn.addEventListener("click", ()=>close());
+    }
+
+    updateUI()
+
+    // Try to get elements and connect the appropriate function to the onClick listener
+    const manageTemplatesBtn = document.querySelector("#bm-main-overlay button#manage-templates");
+    if(manageTemplatesBtn && manageTemplatesBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+        manageTemplatesBtn.addEventListener("click", ()=>openManTemplates())
+    }
+    const manageLinksBtn = document.querySelector("#bm-main-overlay button#manage-links");
+    if(manageLinksBtn && manageLinksBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+        manageLinksBtn.addEventListener("click", ()=>openManLinks())
+    }
+    
     // Add event listener hooks
 }

@@ -35,8 +35,8 @@ export const uiManager = new UIManager();
 const mainOverlay = document.querySelector("#bm-main-overlay");
 // If main overlay already exists that means another Blue Marble instance is already running
 if(!mainOverlay){ 
-    
     // Only run the code if this is the first Blue Marble instance
+    
     const params = new URLSearchParams(document.location.search); // Gets the url search query
     if (params.has("bmShare")) {
         try {
