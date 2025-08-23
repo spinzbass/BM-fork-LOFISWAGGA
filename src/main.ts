@@ -64,13 +64,16 @@ if(!mainOverlay){
     initCreateTemplate();
     initMainOverlay();
 
-    /** Fetches data from a url and then updates the object stored in dataManager appropriately
-     * @since 0.1.0-overhaul
-     */
-    function importFromURL(url: string){
-        
-        const data = EMPTY_BLUE_MARBLE_JSON; // data should be the data fetched from the URL
+    uiManager.open("bm-main-overlay");
 
-        dataManager.appendTemplateDataFromURL(data, url);
-    }
+}
+
+/** Fetches data from a url and then updates the object stored in dataManager appropriately
+ * @since 0.1.0-overhaul
+ */
+function importFromURL(url: string){
+    
+    const data = EMPTY_BLUE_MARBLE_JSON; // data should be the data fetched from the URL
+
+    dataManager.appendTemplateDataFromURL(data, url);
 }
