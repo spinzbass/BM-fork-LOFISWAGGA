@@ -2,34 +2,60 @@ import { TBlueMarbleTemplate } from "../types/schemas";
 import { dataManager, uiManager } from "./main";
 import { generateUUID } from "./utils";
 
+// Typescript / Javascript for the "manageTemplates" window
+
 let selectedFile: Blob = new Blob()
 let lngLat: { lng: number; lat: number; }
 let zoomLevel: number | null = null;
 
+/**Closes this window
+ * @since 0.1.0-overhaul
+ */
 function close(){
     uiManager.close("bm-create-template")
 }
 
-function getCoords(): number[]{
-    console.log("test")
-    if(!(lngLat && zoomLevel)){ window.charity.lib.sonner.toast.error("You must select a pixel first") }
-    console.log("test")
-    console.log("lnglat: ",lngLat)
-    console.log(lngLat.lat, lngLat.lng, zoomLevel)
-    const tilePixel = window.charity.game.mercator.latLonToTileAndPixel(lngLat.lat, lngLat.lng, zoomLevel!)
-    console.log("test")
+/**Gets the coordinates in longitude and latitude of the clicked-on pixel
+ * @returns A 4 element long array representing the coordines of the clicked-on pixel or undefined if an error occured
+ * @since 0.1.0-overhaul
+ */
+function getCoords(): number[] | undefined{
+
+    // lngLat and zoomLevel update whenever the user clicks on a pixel
+    if(!(lngLat && zoomLevel)){ 
+        // If they don't exist, that means the player hasn't clicked on a pixel
+        charity.lib.sonner.toast.error("You must select a pixel first");
+        return;
+    }
+    // Convert latitude and longitude into Tx, Ty, Px and Py
+    const tilePixel = charity.game.mercator.latLonToTileAndPixel(lngLat.lat, lngLat.lng, zoomLevel!)
+    // Combine the tile and pixel coordinates into one array
     return [...tilePixel.tile, ...tilePixel.pixel]
 }
 
+/**Sets the value of the coordinate inputs with the value from the clicked on pixel
+ * @since 0.1.0-overhaul
+ */
 function setCoords(){
     
+    // Get the coordinates of the clicked-on pixel
     const coords = getCoords();
     console.log(coords)
+    
+    // Get the container for the coordinate inputs
     const coordsContainer = document.querySelector("#bm-create-template #coords-container");
     if(!coordsContainer){ return }
-    if(coords.length < 4){ return }
+
+    // If coords is undefined or its length less than 4
+    if(!coords || coords.length < 4){ 
+        // Then the player hadn't clicked on a pixel or a different error occured
+        charity.lib.sonner.toast.error("Click on a pixel first")
+        return;
+    }
 
     let index = 0;
+
+    // Fill in the inputs with data from the gotten coordinates
     coordsContainer.childNodes.forEach((childNode: ChildNode) => {
         if(childNode.nodeName.toLocaleUpperCase() == "INPUT" && index != 4){
             (childNode as HTMLInputElement).value = coords[index].toString();
@@ -38,31 +64,46 @@ function setCoords(){
     });
 }
 
+/**Gets the data from all the inputs and organises them into the Blue Marble template format
+ * @returns The data organised into a Blue Marble template object or undefined if an error occured
+ * @since 0.1.0-overhaul
+ */
 function getNewTemplateData(): TBlueMarbleTemplate | undefined{
 
+    // Tries to get the given elements and checks if they exist
     const coordsContainer = document.querySelector("#bm-create-template #coords-container");
     if(!coordsContainer){ return }
     const nameInput = document.querySelector("#bm-create-template input#name")
     if(!nameInput || nameInput.nodeName !== "INPUT"){ return }
-    if(selectedFile.size <= 0){ return }
     
+    // Get the coordinates from the 4 inputs
     let coords: number[] = [];
     coordsContainer.childNodes.forEach((childNode: ChildNode) => {
     if(childNode.nodeName.toLocaleUpperCase() == "INPUT"){
-        try{
-            coords.push(Number((childNode as HTMLInputElement).value))
-        }catch(err){}
+        // Don't accept empty inputs
+        if((childNode as HTMLInputElement).value !== ""){
+            try{
+                coords.push(Number((childNode as HTMLInputElement).value))
+            }catch{}
+        }
     }
     });
+
+    // Coordinates should be exactly 4 elements long
     if(coords.length !== 4){
-        charity.lib.sonner.toast.error("Fill in all coord inputs"); 
+        // If it isn't that means an error occured,
+        // Likely caused by malformed data being inputted
+        charity.lib.sonner.toast.error("Fill in all the coordinate inputs with numbers"); 
         return;
     }
 
+    // Check if an image was provided
     if(!selectedFile){ 
         charity.lib.sonner.toast.error("Drag or upload an image");
         return;
     }
+
+    // Create a data URL from the file data
     const dataURL = URL.createObjectURL(selectedFile);
 
     return {
@@ -75,28 +116,29 @@ function getNewTemplateData(): TBlueMarbleTemplate | undefined{
     }
 }
 
+/**Creates a new template from the data gotten from the inputs
+ * @since 0.1.0-overhaul
+ */
 function createTemplate(){
 
-    const data = getNewTemplateData();
+    const data = getNewTemplateData(); // Data from inputs
     if(!data){ return }
     dataManager.addTemplate(data);
 }
 
+/**Initialises this window's UI-related javascript (addEventListener hooks, ect)
+ * @since 0.1.0-overhaul
+*/
 export function initCreateTemplate(){
 
     // Add event listener hooks
-    window.charity.game.map.on("click", (e)=>{
-        console.log(e)
+    // Update the clicked-on pixel variables whenver the user clicks on a pixel
+    charity.game.map.on("click", (e)=>{
         lngLat = e.lngLat as {lat: number, lng: number};
-        console.log(e.lngLat)
-        zoomLevel = window.charity.game.map.getZoom();
-        console.log("test")
-        setCoords()
+        zoomLevel = charity.game.map.getZoom();
     })
+
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
-    console.log("coordsBtn: testestsetestseesseetestest ",coordsBtn)
-    console.log(coordsBtn?.nodeName)
-    console.log(coordsBtn?.nodeName.toLocaleUpperCase() === "BUTTON")
     if(coordsBtn && coordsBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
         coordsBtn.addEventListener("click", ()=>{console.log("test");setCoords()})
     }

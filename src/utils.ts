@@ -1,5 +1,11 @@
 import { dataManager } from "./main";
 
+/**Invokes a document.createElement call with the provided tagname, then adds the provided attributes to the created elements 
+ * @param {keyof HTMLElementTagNameMap} tagName Name that dictates what type of element to create
+ * @param {Record<string, string>} attributes A map of attribute name to attribute to value. The key "className" converts to "class"
+ * @returns The created element with the added attributes
+ * @since 0.1.0-overhaul
+*/
 export function createElementWithAttributes<T extends keyof HTMLElementTagNameMap>(tagName: T, attributes?: Record<string, string>): HTMLElement{
 
     const elem = document.createElement(tagName);
@@ -13,6 +19,10 @@ export function createElementWithAttributes<T extends keyof HTMLElementTagNameMa
     return elem;
 }
 
+/**Prompts a download of the provided data in the browser
+ * @param {any} data The data that is downloaded. This can be any JSON-stringifiable data
+ * @since 0.1.0-overhaul
+ */
 export function download(data: any){
 
     try {
@@ -29,12 +39,17 @@ export function download(data: any){
     }
 }
 
+/**Generates a UUID, unique to this user 
+ * @returns The generated UUID
+ * @since 0.1.0-overhaul
+*/
 export function generateUUID(): string{
 
     let uuid = crypto.randomUUID();
-    const userID = window.charity.game.user.data?.id
-    if(dataManager.get()){
-        while(dataManager.get()?.templates.some((template)=>{template.authorID==userID && template.uuid==uuid})){
+    const userID = charity.game.user.data?.id
+    if(dataManager.getType() !== "N/A"){
+        // Make sure that no template shares this UUID and this user's ID
+        while(dataManager.get()?.templates.some((template: any)=>{template.authorID==userID && template.uuid==uuid})){
             uuid = crypto.randomUUID()
         }
     }

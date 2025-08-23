@@ -33,7 +33,7 @@ export const dataManager = new DataManager(storageData);
 export const uiManager = new UIManager();
 
 
-const params = new URLSearchParams(document.location.search);
+const params = new URLSearchParams(document.location.search); // Gets the url search query
 if (params.has("bmShare")) {
     try {
         const json = JSON.parse(params.get("bmShare")!)
@@ -41,10 +41,12 @@ if (params.has("bmShare")) {
     } catch { }
 }
 
+// Make sure the stored object is in Blue Marble's JSON format
 dataManager.toBlueMarbleSchema();
 if(dataManager.getType() !== "BM"){
     dataManager.update(EMPTY_BLUE_MARBLE_JSON)
 }
+
 else if((dataManager.get() as TBlueMarbleJSON).links){
     (dataManager.get() as TBlueMarbleJSON).links?.forEach(link => {
         // Imports data from every URL in the stored object
@@ -58,10 +60,12 @@ initManageLinks();
 initCreateTemplate();
 initMainOverlay();
 
-/** Fetches data from a url and then updates the object stored in dataManager appropriately */
+/** Fetches data from a url and then updates the object stored in dataManager appropriately
+ * @since 0.1.0-overhaul
+ */
 function importFromURL(url: string){
     
     const data = EMPTY_BLUE_MARBLE_JSON; // data should be the data fetched from the URL
 
-    dataManager.appendDataFromURL(data, url);
+    dataManager.appendTemplateDataFromURL(data, url);
 }
