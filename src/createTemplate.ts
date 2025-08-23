@@ -74,12 +74,12 @@ function getNewTemplateData(): TBlueMarbleTemplate | undefined{
     const coordsContainer = document.querySelector("#bm-create-template #coords-container");
     if(!coordsContainer){ return }
     const nameInput = document.querySelector("#bm-create-template input#name")
-    if(!nameInput || nameInput.nodeName !== "INPUT"){ return }
+    if(!nameInput){ return }
     
     // Get the coordinates from the 4 inputs
     let coords: number[] = [];
     coordsContainer.childNodes.forEach((childNode: ChildNode) => {
-    if(childNode.nodeName.toLocaleUpperCase() == "INPUT"){
+    if(childNode.nodeName.toLocaleUpperCase() === "INPUT"){
         // Don't accept empty inputs
         if((childNode as HTMLInputElement).value !== ""){
             try{
@@ -139,15 +139,15 @@ export function initCreateTemplate(){
 
     // Try to get elements and connect the appropriate function to the onClick listener
     const closeBtn = document.querySelector("#bm-create-template button#close");
-    if(closeBtn && closeBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(closeBtn){
         closeBtn.addEventListener("click", ()=>close());
     }
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
-    if(coordsBtn && coordsBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(coordsBtn){
         coordsBtn.addEventListener("click", ()=>setCoords());
     }
     const createBtn = document.querySelector("#bm-create-template button#create");
-    if(createBtn && createBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(createBtn){
         createBtn.addEventListener("click", ()=>createTemplate());
     }
 }

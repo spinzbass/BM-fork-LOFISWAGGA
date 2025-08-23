@@ -139,7 +139,7 @@ function exportSelected(){
 function createTableRows(){
 
     const table = document.querySelector("#bm-manage-templates table");
-    if(table && table.nodeName.toLocaleUpperCase() === "TABLE"){
+    if(table){
         const tableBody = table.children[0];
         if(tableBody && dataManager.getType() === "BM"){
 
@@ -248,19 +248,19 @@ export function initManageTemplates(){
 
     // Try to get elements and connect the appropriate function to the onClick listener
     const closeBtn = document.querySelector("#bm-manage-templates button#close");
-    if(closeBtn && closeBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(closeBtn){
         closeBtn.addEventListener("click", ()=>close());
     }
     const createBtn = document.querySelector("#bm-manage-templates button#create");
-    if(createBtn && createBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(createBtn){
         createBtn.addEventListener("click", ()=>uiManager.open("bm-create-template"));
     }
     const exportAllBtn = document.querySelector("#bm-manage-templates button#export-all")
-    if(exportAllBtn && exportAllBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(exportAllBtn){
         exportAllBtn.addEventListener("click", ()=>exportAll());
     }
     const exportSelectedBtn = document.querySelector("#bm-manage-templates button#export-selected");
-    if(exportSelectedBtn && exportSelectedBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(exportSelectedBtn){
         exportSelectedBtn.addEventListener("click", ()=>exportSelected());
     }
 

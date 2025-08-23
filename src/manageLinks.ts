@@ -20,8 +20,8 @@ function close(){
 function save(){
 
     // Try to get the URL input and check if it exists
-    let urlInput = document.querySelector("#bm-manage-links #url");
-    if(!urlInput || urlInput.nodeName.toLocaleUpperCase() !== "INPUT"){ return };
+    let urlInput = document.querySelector("#bm-manage-links input#url");
+    if(!urlInput){ return };
 
     try{
         const url = new URL((urlInput as HTMLInputElement).value); // Check if is valid URL
@@ -40,8 +40,8 @@ function save(){
  */
 function cancel(){
     // Try to get the URL input and check if it exists
-    let urlInput = document.querySelector("#bm-manage-links #url");
-    if(!urlInput || urlInput.nodeName.toLocaleUpperCase() !== "INPUT"){ return };
+    let urlInput = document.querySelector("#bm-manage-links input#url");
+    if(!urlInput){ return };
 
     const data = (dataManager.get() as TBlueMarbleJSON) // temp variable to shorten the below code
     if(dataManager.getType() === "BM" && data.links && data.links.length > 0){
@@ -178,19 +178,19 @@ export function initManageLinks(){
     
     // Try to get elements and connect the appropriate function to the onClick listener
     const closeBtn = document.querySelector("#bm-manage-links button#close");
-    if(closeBtn && closeBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(closeBtn){
         closeBtn.addEventListener("click", ()=>close());
     }
     const saveBtn = document.querySelector("#bm-manage-links button#save");
-    if(saveBtn && saveBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(saveBtn){
         saveBtn.addEventListener("click", ()=>save());
     }
     const cancelBtn = document.querySelector("#bm-manage-links button#cancel");
-    if(cancelBtn && cancelBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(cancelBtn){
         cancelBtn.addEventListener("click", ()=>cancel());
     }
     const exportSelectedBtn = document.querySelector("#bm-manage-links button#export-selected");
-    if(exportSelectedBtn && exportSelectedBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(exportSelectedBtn){
         exportSelectedBtn.addEventListener("click", ()=>exportSelected());
     }
 

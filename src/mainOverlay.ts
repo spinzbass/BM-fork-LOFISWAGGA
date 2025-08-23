@@ -32,15 +32,15 @@ function updateUI(){
 
     // Try to get elements and set the appropriate text
     const nameTD = document.querySelector("#bm-main-overlay td#name");
-    if(nameTD && nameTD.nodeName.toLocaleUpperCase() === "TD"){
+    if(nameTD){
         nameTD.textContent = charity.game.user.data.name;
     }
     const dropletsTD = document.querySelector("#bm-main-overlay td#droplets")
-    if(dropletsTD && dropletsTD.nodeName.toLocaleUpperCase() === "TD"){
+    if(dropletsTD){
         dropletsTD.textContent = charity.game.user.data.droplets.toString();
     }
     const levelTD = document.querySelector("#bm-main-overlay td#level");
-    if(levelTD && levelTD.nodeName.toLocaleUpperCase() === "TD"){
+    if(levelTD){
         levelTD.textContent = charity.game.user.data.level.toString();
     }
 }
@@ -53,15 +53,15 @@ export function initMainOverlay(){
 
     // Try to get the close button and connect the appropriate function to the onClick listener
     const closeBtn = document.querySelector("#bm-main-overlay button#close");
-    if(closeBtn && closeBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(closeBtn){
         closeBtn.addEventListener("click", ()=>close());
     }
     const manageTemplatesBtn = document.querySelector("#bm-main-overlay button#manage-templates");
-    if(manageTemplatesBtn && manageTemplatesBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(manageTemplatesBtn){
         manageTemplatesBtn.addEventListener("click", ()=>openManTemplates())
     }
     const manageLinksBtn = document.querySelector("#bm-main-overlay button#manage-links");
-    if(manageLinksBtn && manageLinksBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
+    if(manageLinksBtn){
         manageLinksBtn.addEventListener("click", ()=>openManLinks())
     }
 
