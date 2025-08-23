@@ -183,17 +183,16 @@ export function initManageLinks(){
     }
     const saveBtn = document.querySelector("#bm-manage-links button#save");
     if(saveBtn && saveBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
-        saveBtn.addEventListener("click", ()=>save())
+        saveBtn.addEventListener("click", ()=>save());
     }
     const cancelBtn = document.querySelector("#bm-manage-links button#cancel");
     if(cancelBtn && cancelBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
-        cancelBtn.addEventListener("click", ()=>cancel())
+        cancelBtn.addEventListener("click", ()=>cancel());
     }
-    createTableRows();
-    
-    // Try to get the export selected button and connect the appropriate function to the onClick listener
     const exportSelectedBtn = document.querySelector("#bm-manage-links button#export-selected");
     if(exportSelectedBtn && exportSelectedBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
-        exportSelectedBtn.addEventListener("click", ()=>exportSelected())
+        exportSelectedBtn.addEventListener("click", ()=>exportSelected());
     }
+
+    uiManager.updateFunctions["bm-manage-links"] = updateUI;
 }

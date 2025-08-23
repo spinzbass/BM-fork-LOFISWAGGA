@@ -56,10 +56,6 @@ export function initMainOverlay(){
     if(closeBtn && closeBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
         closeBtn.addEventListener("click", ()=>close());
     }
-
-    updateUI()
-
-    // Try to get elements and connect the appropriate function to the onClick listener
     const manageTemplatesBtn = document.querySelector("#bm-main-overlay button#manage-templates");
     if(manageTemplatesBtn && manageTemplatesBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
         manageTemplatesBtn.addEventListener("click", ()=>openManTemplates())
@@ -68,4 +64,6 @@ export function initMainOverlay(){
     if(manageLinksBtn && manageLinksBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
         manageLinksBtn.addEventListener("click", ()=>openManLinks())
     }
+
+    uiManager.updateFunctions["bm-main-overlay"] = updateUI;
 }

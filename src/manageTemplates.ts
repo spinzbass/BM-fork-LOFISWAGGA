@@ -259,12 +259,10 @@ export function initManageTemplates(){
     if(exportAllBtn && exportAllBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
         exportAllBtn.addEventListener("click", ()=>exportAll());
     }
-    
-    createTableRows();
-    
-    // Try to get the export selected button and connect the appropriate function to the onClick listener
     const exportSelectedBtn = document.querySelector("#bm-manage-templates button#export-selected");
     if(exportSelectedBtn && exportSelectedBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
-        exportSelectedBtn.addEventListener("click", ()=>exportSelected())
+        exportSelectedBtn.addEventListener("click", ()=>exportSelected());
     }
+
+    uiManager.updateFunctions["bm-manage-templates"] = updateUI;
 }
