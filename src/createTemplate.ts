@@ -163,7 +163,7 @@ function createTemplate(){
 }
 
 /**Initialises this window's UI-related javascript (addEventListener hooks, ect)
- * @since 0.2.0-overhaul
+ * @since 0.3.0-overhaul
 */
 export function initCreateTemplate(){
 

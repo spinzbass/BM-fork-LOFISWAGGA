@@ -65,7 +65,7 @@ export function generateUUID(): string{
  * @returns A lngLat object or undefined if an error occured e.g. malformed coordinates data
  * @since 0.3.0-overhaul
  */
-export function canvasPosToLatLng(coordinates: number[]): {lng: number, lat: number} | undefined{
+export function coordinatesToLatLng(coordinates: number[]): {lng: number, lat: number} | undefined{
     // Function provided by courtesy of CloudBurst
     if(coordinates.length !== 4) { return };
     let actualX = (coordinates[0] * 1000) + coordinates[2];
