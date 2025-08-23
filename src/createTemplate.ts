@@ -4,7 +4,7 @@ import { generateUUID } from "./utils";
 
 // Typescript / Javascript for the "manageTemplates" window
 
-let selectedFile: Blob = new Blob()
+let selectedFile: File | undefined
 let lngLat: { lng: number; lat: number; }
 let zoomLevel: number | null = null;
 
@@ -62,6 +62,42 @@ function setCoords(){
             index++;
         }
     });
+}
+/**Handles the user dropping a file in the window
+ * @param {DragEvent} e The drop event
+ * @since 0.3.0-overhaul
+ */
+function dropFile(e: DragEvent){
+
+    e.preventDefault() // Prevent default browser behaviour (the file being opened)
+
+    // Check if the item is a file
+    if (e.dataTransfer?.items && e.dataTransfer.items[0].kind === "file") {
+        // Only get one file, the first one
+        selectedFile = (e.dataTransfer.items[0].getAsFile() as File); 
+    } else if(e.dataTransfer?.files) {
+        // Only get one file, the first one
+        selectedFile = e.dataTransfer.files[0];
+    }
+}
+
+
+/**This function is triggered whenever the user drags a file over the window
+ * @param {DragEvent} e The dragOver event
+ * @since 0.3.0-overhaul
+ */
+function dragOverFile(e: DragEvent){
+    // Add functionality
+}
+
+/**Handles the onChange functionality of the "upload an image" input 
+ * @param {InputEvent} e The onChange event
+ * @since 0.3.0-overhaul
+*/
+function fileInputChange(e: InputEvent){
+    const files = (e.target as HTMLInputElement).files;
+    if(!files || files.length === 0){ return }
+    selectedFile = files[0]; // Get the file from the input
 }
 
 /**Gets the data from all the inputs and organises them into the Blue Marble template format
@@ -137,7 +173,7 @@ export function initCreateTemplate(){
         zoomLevel = charity.game.map.getZoom();
     })
 
-    // Try to get elements and connect the appropriate function to the onClick listener
+    // Try to get elements and connect the appropriate function to the corresponding event listener
     const closeBtn = document.querySelector("#bm-create-template button#close");
     if(closeBtn){
         closeBtn.addEventListener("click", ()=>close());
@@ -145,6 +181,15 @@ export function initCreateTemplate(){
     const coordsBtn = document.querySelector("#bm-create-template button#coords");
     if(coordsBtn){
         coordsBtn.addEventListener("click", ()=>setCoords());
+    }
+    const fileDrop = document.querySelector("#bm-create-template div#file-drop");
+    if(fileDrop){
+        fileDrop.addEventListener("dragOver", (e)=>dragOverFile(e as DragEvent));
+        fileDrop.addEventListener("drop", (e)=>dropFile(e as DragEvent));
+    }
+    const fileUpload = document.querySelector("#bm-create-template input#file");
+    if(fileUpload){
+        fileUpload.addEventListener("change", (e)=>fileInputChange(e as InputEvent))
     }
     const createBtn = document.querySelector("#bm-create-template button#create");
     if(createBtn){
