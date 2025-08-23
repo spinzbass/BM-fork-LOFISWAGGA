@@ -47,9 +47,18 @@ function updateUI(){
 
 
 /**Initialises this window's UI-related javascript (addEventListener hooks, ect)
- * @since 0.2.0-overhaul
+ * @since 0.4.0-overhaul
 */
 export function initMainOverlay(){
+
+    updateUI();
+
+    // Update the values in the UI whenever user data changes
+    Object.defineProperty(charity.game.user, "data", {
+        set: function(){
+            updateUI();
+        }
+    })
 
     // Try to get the close button and connect the appropriate function to the onClick listener
     const closeBtn = document.querySelector("#bm-main-overlay button#close");
@@ -64,6 +73,4 @@ export function initMainOverlay(){
     if(manageLinksBtn){
         manageLinksBtn.addEventListener("click", ()=>openManLinks())
     }
-
-    uiManager.updateFunctions["bm-main-overlay"] = updateUI;
 }
