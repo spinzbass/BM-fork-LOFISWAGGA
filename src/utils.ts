@@ -2,16 +2,19 @@ import { dataManager } from "./main";
 
 /**Invokes a document.createElement call with the provided tagname, then adds the provided attributes to the created elements 
  * @param {keyof HTMLElementTagNameMap} tagName Name that dictates what type of element to create
- * @param {Record<string, string>} attributes A map of attribute name to attribute to value. The key "className" converts to "class"
+ * @param {Record<string, any>} attributes A map of attribute name to attribute to value. The key "className" converts to "class" and the key "textContent" sets the text of the element
  * @returns The created element with the added attributes
  * @since 0.1.0-overhaul
 */
-export function createElementWithAttributes<T extends keyof HTMLElementTagNameMap>(tagName: T, attributes?: Record<string, string>): HTMLElement{
+export function createElementWithAttributes<T extends keyof HTMLElementTagNameMap>(tagName: T, attributes?: Record<string, any>): HTMLElement{
 
     const elem = document.createElement(tagName);
     if(attributes) {
+        // Set the values for each attribute
         Object.entries(attributes).forEach(([attr, value])=>{
+            // Do conversions where necessary
             if(attr === "className") {elem.setAttribute("class", value)}
+            else if(attr === "textContent") {elem.textContent = value}
             else elem.setAttribute(attr, value);
         })
     }
