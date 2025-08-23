@@ -47,7 +47,7 @@ function updateUI(){
 
 
 /**Initialises this window's UI-related javascript (addEventListener hooks, ect)
- * @since 0.1.0-overhaul
+ * @since 0.2.0-overhaul
 */
 export function initMainOverlay(){
 
@@ -68,6 +68,4 @@ export function initMainOverlay(){
     if(manageLinksBtn && manageLinksBtn.nodeName.toLocaleUpperCase() === "BUTTON"){
         manageLinksBtn.addEventListener("click", ()=>openManLinks())
     }
-    
-    // Add event listener hooks
 }

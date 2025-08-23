@@ -142,7 +142,7 @@ function createTableRows(){
     if(table && table.nodeName.toLocaleUpperCase() === "TABLE"){
         const tableBody = table.children[0];
         if(tableBody && dataManager.getType() === "BM"){
-            
+
             // Reset the table body's contents
             tableBody.innerHTML = "";
 
@@ -239,11 +239,10 @@ function updateUI(){
 
     exportTemplateIndexes = [];
     createTableRows();
-    // Reload templates
 }
 
 /**Initialises this window's UI-related javascript (addEventListener hooks, ect)
- * @since 0.1.0-overhaul
+ * @since 0.2.0-overhaul
 */
 export function initManageTemplates(){
 
