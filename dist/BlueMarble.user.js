@@ -6,7 +6,7 @@
 // @author       SwingTheVine
 // @license      MPL-2.0
 // @supportURL   https://discord.gg/tpeBPy46hf
-// @homepageURL  https://bluemarble.camilledaguin.fr/
+// @homepageURL  https://bluemarble.lol/
 // @icon         https://raw.githubusercontent.com/SwingTheVine/Wplace-BlueMarble/8d02ac9cbe8f6861248152f2b0d632a0b4a830ee/dist/assets/Favicon.png
 // @updateURL    https://raw.githubusercontent.com/SwingTheVine/Wplace-BlueMarble/main/dist/BlueMarble.user.js
 // @downloadURL  https://raw.githubusercontent.com/SwingTheVine/Wplace-BlueMarble/main/dist/BlueMarble.user.js
