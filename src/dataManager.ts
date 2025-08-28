@@ -94,7 +94,7 @@ export default class DataManager {
                     author: template.authorID, // Numerical ID of the author, taken from wplace
                     uuid: template.uuid, // UUID to distinguish templates made by the same author
                 })),
-                whitelist: [],
+                whitelist: this.object.links ?? [], // List of alliance URLs
                 blacklist: [],
             };
         }
@@ -131,7 +131,8 @@ export default class DataManager {
                     enabled: template.enabled,
                     urlLink: template.sources[0], // Link to the template image's file data
                     uuid: template.uuid, // UUID to distinguish templates made by the same author
-                }))
+                })),
+                links: this.object.whitelist, // List of externally hosted JSON links
             }
         }
 

@@ -53,12 +53,14 @@ export const CharityJSON = z.object({
     contact: z.string(),
   }).optional(),
   templates: z.array(CharityTemplate),
+  // List of alliance URLs
   whitelist: z.array(
     z.object({
       name: z.string().optional(),
       url: z.string(),
     })
   ),
+  // List of blacklisted alliance URLs
   blacklist: z.array(
     z.object({
       name: z.string().optional(),
