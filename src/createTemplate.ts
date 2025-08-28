@@ -3,10 +3,11 @@ import { dataManager, uiManager } from "./main";
 import { drawTemplateOfIndex } from "./templates";
 import { generateUUID } from "./utils";
 
-// Typescript / Javascript for the "manageTemplates" window
+// Typescript / Javascript for the "createTemplates" window
 
 let selectedFile: File | undefined
 let tilePixel: {tile: number[], pixel: number[]}
+
 /**Closes this window
  * @since 0.1.0-overhaul
  */
@@ -16,7 +17,8 @@ function close(){
 
 /**Gets the coordinates of the clicked-on pixel
  * @returns A 4 element long array representing the coordines of the clicked-on pixel or undefined if an error occured
- * @since 0.4.0-overhaul
+ * @since 0.1.0-overhaul
+ * @version 2.0
  */
 function getCoords(): number[] | undefined{
 
@@ -64,7 +66,7 @@ function setCoords(){
         }
     });
 }
-/**Handles the user dropping a file in the window
+/**Handles the user dropping a file in the window. Sets the selected file
  * @param {DragEvent} e The drop event
  * @since 0.3.0-overhaul
  */
@@ -91,7 +93,7 @@ function dragOverFile(e: DragEvent){
     // Add functionality
 }
 
-/**Handles the onChange functionality of the "upload an image" input 
+/**Handles the onChange functionality of the "upload an image" input. Sets the selected file
  * @param {InputEvent} e The onChange event
  * @since 0.3.0-overhaul
 */
@@ -154,7 +156,8 @@ function getNewTemplateData(): TBlueMarbleTemplate | undefined{
 }
 
 /**Creates a new template from the data gotten from the inputs
- * @since 0.4.0-overhaul
+ * @since 0.1.0-overhaul
+ * @version 2.0
  */
 function createTemplate(){
 

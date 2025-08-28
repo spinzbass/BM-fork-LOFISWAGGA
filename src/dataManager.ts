@@ -24,38 +24,53 @@ export default class DataManager {
 
     /**Updates the stored object whilst making sure the type matches
      * @param {Schemas} data The data used to update the stored object
+     * @returns A boolean representing whether the function succeeded
      * @since 0.1.0-overhaul
+     * @version 1.1
      */
-    update(data: Schemas){
+    update(data: Schemas): boolean{
 
         // Match the stored type to the type of schema
         if(BlueMarbleJSON.safeParse(data).success){this.type = "BM"}
         else if(CharityJSON.safeParse(data).success){this.type = "CHA"}
-        else {return} // If it doesn't match any known schema, then disregard the data
+        else { return false } // If it doesn't match any known schema, then disregard the data
 
         // Assign the data to the stored object
         this.object = data;
 
         this.gmStore();
+
+        return true;
     }
-    /**Gets the stored object */
+    /**Gets the stored object
+     * @returns The stored object
+     * @since 0.1.0-overhaul
+     */
     get(): Schemas | undefined{
         return this.object;
     }
 
     /**Gets the stored type of the stored object 
      * @returns A string representing the type of schema / format (see types.ts)
+     * @since 0.1.0-overhaul
     */
     getType(): SchemaTypeNames{
         return this.type;
     }
 
-    /** Converts the current object in the format of any schema into the format of Charity's schema 
+    /** Converts the current object in the format of any schema into the format of Charity's schema.
+     * 
+     * Only runs if the stored object's type is known
+     * @returns A boolean representing whether the function succeeded
      * @since 0.1.0-overhaul
+     * @version 1.1
     */
-    toCharitySchema(){
+    toCharitySchema(): boolean{
 
-        if(this.type === "N/A" || this.type === "CHA"){ return } // If the schema type is unknown or already correct, don't do any conversions
+        if(this.type === "N/A"){ return false };
+
+        // If the schema type is already correct, don't do any conversions
+        if(this.type === "CHA"){ return  true };
 
         if(this.type === "BM"){
             this.object = this.object as TBlueMarbleJSON; // Type is BM so treat the object as a Blue Marble object
@@ -85,14 +100,22 @@ export default class DataManager {
         }
 
         this.type = "CHA"; // Update the type to match
+        return true;
     }
 
-    /** Converts the current object in the format of any schema into the format of Blue Marble's schema 
+    /** Converts the current object in the format of any schema into the format of Blue Marble's schema.
+     * 
+     * Only runs if the stored object's type is known
+     * @returns A boolean representing whether the function succeeded
      * @since 0.1.0-overhaul
+     * @version 1.1
     */
-    toBlueMarbleSchema(){
+    toBlueMarbleSchema(): boolean{
 
-        if(this.type === "N/A" || this.type === "BM"){ return } // If the schema type is unknown or already correct, don't do any conversions
+        if(this.type === "N/A"){ return false };
+
+        // If the schema type is already correct, don't do any conversions
+        if(this.type === "BM"){ return  true };
 
         if(this.type === "CHA"){
             this.object = this.object as TCharityJSON; // Type is CHA so treat the object as a Charity object
@@ -113,15 +136,18 @@ export default class DataManager {
         }
 
         this.type = "BM"; // Update the type to match
+        return true;
     }
 
-    /** Appends non-meta data from the provided object into the stored object 
+    /** Appends non-meta data from the provided object into the stored object. Only runs if the stored object is in Blue Marble's JSON format
      * @param {Schemas} object Object from which the appended data is taken
+     * @returns A boolean representing whether the function succeeded
      * @since 0.1.0-overhaul
+     * @version 1.1
     */
-    appendData(object: Schemas){
+    appendData(object: Schemas): boolean{
 
-        if(this.type !== "BM"){ return; }; // Only append object if the stored object is in Blue Marble's format
+        if(this.type !== "BM"){ return false }; // Only append object if the stored object is in Blue Marble's JSON format
         this.object = this.object as TBlueMarbleJSON
 
         // If the provided object is in Charity's format
@@ -149,15 +175,21 @@ export default class DataManager {
         }
 
         this.gmStore();
+        return true;
     }
 
-    /**Appends template data gotten from a URL, appropriately marking the orign link / url on each of the templates
+    /**Appends template data gotten from a URL, appropriately marking the orign link / url on each of the templates.
+     * 
+     * Only runs if the stored object is in Blue Marble's JSON format
      * @param {TBlueMarbleJSON} data The data gotten from the URL
      * @param {string} url The URL from which the data came from
+     * @returns A boolean representing whether the function succeeded
      * @since 0.1.0-overhaul
+     * @version 1.1
     */
-    appendTemplateDataFromURL(data: TBlueMarbleJSON, url: string) {
-        if(this.type !== "BM") { return }; // Only append object if the stored object is in Blue Marble's format
+    appendTemplateDataFromURL(data: TBlueMarbleJSON, url: string): boolean {
+
+        if(this.type !== "BM") { return false }; // Only append object if the stored object is in Blue Marble's JSON format
         this.object = this.object as TBlueMarbleJSON
 
         const importedTemplates = data.templates;
@@ -193,17 +225,19 @@ export default class DataManager {
         this.object.templates = templatesCopy;
     
         this.gmStore();
+        return true;
     }
 
     /**Prepends the provided template to the list of templates. 
      * Only runs if the stored object is in Blue Marble's JSON format
      * @param {TBlueMarbleTemplate} template The template data that is appended.
      * @returns A boolean representing whether the operation was successful
-     * @since 0.4.0-overhaul
+     * @since 0.1.0-overhaul
+     * @version 1.1
     */
     addTemplate(template: TBlueMarbleTemplate): boolean{
 
-        if(this.type !== "BM"){ return false } // Only append if the stored object is in Blue Marble format
+        if(this.type !== "BM"){ return false } // Only append if the stored object is in Blue Marble's JSON format
         (this.object as TBlueMarbleJSON).templates.unshift(template);
         
         this.gmStore();
@@ -217,11 +251,12 @@ export default class DataManager {
      * Only runs if the stored object is in Blue Marble's JSON format
      * @param {TBlueMarbleLink} link The link object data that is appended.
      * @returns A boolean representing whether the function succeeded
-     * @since 0.4.0-overhaul
+     * @since 0.1.0-overhaul
+     * @version 1.1
     */
     addLink(link: TBlueMarbleLink): boolean{
 
-        if(this.type !== "BM"){ return false } // Only append if the stored object is in Blue Marble format
+        if(this.type !== "BM"){ return false } // Only append if the stored object is in Blue Marble's JSON format
         this.object = this.object as TBlueMarbleJSON
 
         if(!this.object.links){ // Create links if it doesn't exist
@@ -244,7 +279,7 @@ export default class DataManager {
      */
     getExportableData(templateIndexes?: number[], linkIndexes?: number[]): Schemas | null{
 
-        if(this.type === "N/A") { return null} // Return nothing if the type of the stored object is unknown
+        if(this.type === "N/A") { return null } // Return nothing if the type of the stored object is unknown
 
         if((this.object as Schemas).hasOwnProperty("links")){
             const typedCopy = this.object as Schemas & {links: any[]}
@@ -286,13 +321,18 @@ export default class DataManager {
         }
     }
 
-    /**Stores the current object in local GM storage
+    /**Stores the current object in local GM storage. Only runs if the stored object is in Blue Marble's JSON format
+     * @returns A boolean representing whether the function succeeded
      * @since 0.1.0-overhaul
+     * @version 1.1
      */
-    gmStore(){
-        if(this.type !== "BM"){ return; }
+    gmStore(): boolean{
+
+        if(this.type !== "BM"){ return false }; // Only store objects in Blue Marble's JSON format
         this.object = this.object as TBlueMarbleJSON
         // Store logic
+
+        return true;
     }
 }
 

@@ -18,7 +18,8 @@ function close(){
 
 /**Toggles the enabled state a template of given index and reflects the changes in the canvas / map
  * @param {number} idx Index of the template
- * @since 0.4.0-overhaul
+ * @since 0.1.0-overhaul
+ * @version 2.0
  */
 function enabledToggle(idx: number){
 
@@ -76,7 +77,8 @@ function shareTemplate(idx: number){
 
 /**Removes a template of the given index from the dataManager's object and reflects the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.4.0-overhaul
+ * @since 0.1.0-overhaul
+ * @version 2.0
  */
 function deleteTemplate(idx: number){
 
@@ -92,7 +94,8 @@ function deleteTemplate(idx: number){
 
 /**Moves a template up in draw order / ahead in the stored object's templates array and reflect the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.4.0-overhaul
+ * @since 0.1.0-overhaul
+ * @version 2.0
  */
 function shiftUp(idx: number){
 
@@ -109,7 +112,8 @@ function shiftUp(idx: number){
 
 /**Moves a template down in draw order / back in the stored object's templates array and reflects the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.4.0-overhaul
+ * @since 0.1.0-overhaul
+ * @version 2.0
  */
 function shiftDown(idx: number){
 

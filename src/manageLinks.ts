@@ -16,7 +16,8 @@ function close(){
 }
 
 /**Updates the link stored in the stored object with the one in the input
- * @since 0.4.0-overhaul
+ * @since 0.1.0-overhaul
+ * @version 2.0
  */
 function save(){
 
@@ -72,7 +73,8 @@ function exportToggle(idx: number){
 
 /**Moves a template up in draw order / ahead in the stored object's templates array and reflects the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.4.0-overhaul
+ * @since 0.1.0-overhaul
+ * @version 2.0
  */
 function shiftUp(idx: number){
     let temp = dataManager.get() as Schemas
@@ -88,7 +90,8 @@ function shiftUp(idx: number){
 
 /**Moves a template down in draw order / back in the stored object's templates array and reflects the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.4.0-overhaul
+ * @since 0.1.0-overhaul
+ * @version 2.0
  */
 function shiftDown(idx: number){
     let temp = dataManager.get() as Schemas
