@@ -2,7 +2,7 @@ import { TBlueMarbleJSON, TBlueMarbleTemplate, TCharityTemplate } from "../types
 import { Schemas } from "../types/types";
 import { dataManager, uiManager } from "./main";
 import { drawAllTemplates } from "./templates";
-import { coordinatesToLatLng, createElementWithAttributes, download } from "./utils";
+import { createElementWithAttributes, download } from "./utils";
 
 // Typescript / Javascript for the "manageTemplates" window
 
@@ -50,9 +50,13 @@ function exportToggle(idx: number){
  */
 function flyToTemplate(idx: number){
     const coordsArr = (dataManager.get() as TBlueMarbleJSON).templates[idx].coords;
-    const lngLat = coordinatesToLatLng(coordsArr);
-    if(!lngLat){ return };
-    charity.game.map.flyTo({center: lngLat, zoom: 9}) // Fly to the template's position
+    const zoom = charity.game.map.getZoom();
+    // Convert to Px and Py used in mercator's functions
+    const mercatorPixelsX = coordsArr[0]*1000+coordsArr[2]; // Tx * 1000 + Px
+    const mercatorPixelsY = coordsArr[1]*1000+coordsArr[3]; // Ty * 1000 + Px
+    const lngLatBounds = charity.game.mercator.pixelsToLatLon(mercatorPixelsX, mercatorPixelsY, zoom);
+    if(!lngLatBounds){ return };
+    charity.game.map.flyTo({center: lngLatBounds, zoom: 9}) // Fly to the template's position
 }
 
 /**Creates a one-click shareable link for the given template and copies it to the clipboard
