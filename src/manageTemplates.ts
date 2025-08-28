@@ -54,6 +54,7 @@ function flyToTemplate(idx: number){
     // Convert to Px and Py used in mercator's functions
     const mercatorPixelsX = coordsArr[0]*1000+coordsArr[2]; // Tx * 1000 + Px
     const mercatorPixelsY = coordsArr[1]*1000+coordsArr[3]; // Ty * 1000 + Px
+    
     const lngLatBounds = charity.game.mercator.pixelsToLatLon(mercatorPixelsX, mercatorPixelsY, zoom);
     if(!lngLatBounds){ return };
     charity.game.map.flyTo({center: lngLatBounds, zoom: 9}) // Fly to the template's position

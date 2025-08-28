@@ -6,7 +6,7 @@ import { generateUUID } from "./utils";
 // Typescript / Javascript for the "createTemplates" window
 
 let selectedFile: File | undefined
-let tilePixel: {tile: number[], pixel: number[]}
+let tilePixel: {tile: [number, number], pixel: [number, number]}
 
 /**Closes this window
  * @since 0.1.0-overhaul
@@ -20,7 +20,7 @@ function close(){
  * @since 0.1.0-overhaul
  * @version 2.0
  */
-function getCoords(): number[] | undefined{
+function getCoords(): [number, number, number, number] | undefined{
 
     // This code will currently take values from the *last* selected pixel
     // If the user deselects a pixel, there will still be data which might cause confusion
@@ -49,8 +49,8 @@ function setCoords(){
     const coordsContainer = document.querySelector("#bm-create-template #coords-container");
     if(!coordsContainer){ return }
 
-    // If coords is undefined or its length less than 4
-    if(!coords || coords.length < 4){ 
+    // If coords is undefined
+    if(!coords){ 
         // Then the player hadn't clicked on a pixel or a different error occured
         charity.lib.sonner.toast.error("Click on a pixel first")
         return;
@@ -146,7 +146,7 @@ function getNewTemplateData(): TBlueMarbleTemplate | undefined{
     const dataURL = URL.createObjectURL(selectedFile);
 
     return {
-        coords: coords,
+        coords: coords as [number, number, number, number],
         enabled: true,
         uuid: generateUUID(),
         name: (nameInput as HTMLInputElement).value,

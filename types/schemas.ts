@@ -74,7 +74,7 @@ export const CharityJSON = z.object({
  */
 export const BlueMarbleTemplate = z.object({
   name: z.string().optional(), // Name of the template
-  coords: z.array(z.number()), // 4 element array containing the location of the template
+  coords: z.array(z.number()).length(4), // 4 element array containing the location of the template
   authorID: z.number().optional(), // Numerical ID of the author, taken from wplace
   enabled: z.boolean(),
   urlLink: z.string().optional(), // Link to the template image's file data
