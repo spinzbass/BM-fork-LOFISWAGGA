@@ -195,35 +195,45 @@ export default class DataManager {
         this.gmStore();
     }
 
-    /**Appends the provided template to the list of templates.
+    /**Prepends the provided template to the list of templates. 
+     * Only runs if the stored object is in Blue Marble's JSON format
      * @param {TBlueMarbleTemplate} template The template data that is appended.
-     * @since 0.1.0-overhaul
+     * @returns A boolean representing whether the operation was successful
+     * @since 0.4.0-overhaul
     */
-    addTemplate(template: TBlueMarbleTemplate){
+    addTemplate(template: TBlueMarbleTemplate): boolean{
 
-        if(this.type !== "BM"){ return } // Only append if the stored object is in Blue Marble format
-        (this.object as TBlueMarbleJSON).templates.push(template);
+        if(this.type !== "BM"){ return false } // Only append if the stored object is in Blue Marble format
+        (this.object as TBlueMarbleJSON).templates.unshift(template);
         
         this.gmStore();
+
+        return true;
     }
 
-    /**Appends the provided link object to the list of links. If the links object doesn't exist, then creates it
+    /**Appends the provided link object to the list of links. 
+     * If the stored object's links property doesn't exist, then creates it. 
+     * 
+     * Only runs if the stored object is in Blue Marble's JSON format
      * @param {TBlueMarbleLink} link The link object data that is appended.
-     * @since 0.1.0-overhaul
+     * @returns A boolean representing whether the function succeeded
+     * @since 0.4.0-overhaul
     */
-    addLink(link: TBlueMarbleLink){
+    addLink(link: TBlueMarbleLink): boolean{
 
-        if(this.type !== "BM"){ return } // Only append if the stored object is in Blue Marble format
+        if(this.type !== "BM"){ return false } // Only append if the stored object is in Blue Marble format
         this.object = this.object as TBlueMarbleJSON
 
         if(!this.object.links){ // Create links if it doesn't exist
             this.object.links = [link];
-            return;
+            return true;
         }
 
         this.object.links.push(link);
         
         this.gmStore();
+        
+        return true;
    }
 
     /** Takes in paramaters used to modify or filter data to create a desired subset of data, ready to be exported

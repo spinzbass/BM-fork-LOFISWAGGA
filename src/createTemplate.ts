@@ -1,5 +1,6 @@
 import { TBlueMarbleTemplate } from "../types/schemas";
 import { dataManager, uiManager } from "./main";
+import { drawTemplateOfIndex } from "./templates";
 import { generateUUID } from "./utils";
 
 // Typescript / Javascript for the "manageTemplates" window
@@ -153,13 +154,18 @@ function getNewTemplateData(): TBlueMarbleTemplate | undefined{
 }
 
 /**Creates a new template from the data gotten from the inputs
- * @since 0.1.0-overhaul
+ * @since 0.4.0-overhaul
  */
 function createTemplate(){
 
     const data = getNewTemplateData(); // Data from inputs
     if(!data){ return }
-    dataManager.addTemplate(data);
+    if(dataManager.addTemplate(data)){
+        charity.lib.sonner.toast.success("Template added")
+        drawTemplateOfIndex(0); // Template is added to the start of the array, so use index 0
+    }else{
+        charity.lib.sonner.toast.error("Failed to add template")
+    }
 }
 
 /**Initialises this window's UI-related javascript (addEventListener hooks, ect)

@@ -4,6 +4,7 @@ import DataManager from "./dataManager.ts";
 import { initMainOverlay } from "./mainOverlay.ts";
 import { initManageLinks } from "./manageLinks.ts";
 import { initManageTemplates } from "./manageTemplates.ts";
+import { drawAllTemplates } from "./templates.ts";
 import UIManager from "./uiManager.ts";
 
 import "@placecharity/framework-types"
@@ -57,6 +58,8 @@ if(!mainOverlay){
             importFromURL(link.url);
         })
     }
+
+    drawAllTemplates(); // Data has been imported so draw the templates in the array
 
     // Call the initialisation functions of all the windows
     initManageTemplates();

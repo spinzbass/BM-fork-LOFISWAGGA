@@ -2,6 +2,7 @@ import { Schemas } from "../types/types";
 import { dataManager, uiManager } from "./main";
 import { createElementWithAttributes, download } from "./utils";
 import { TBlueMarbleJSON } from "../types/schemas";
+import { drawAllTemplates } from "./templates";
 
 // Typescript / Javascript for the "manageTemplates" window
 
@@ -15,7 +16,7 @@ function close(){
 }
 
 /**Updates the link stored in the stored object with the one in the input
- * @since 0.1.0-overhaul
+ * @since 0.4.0-overhaul
  */
 function save(){
 
@@ -25,9 +26,13 @@ function save(){
 
     try{
         const url = new URL((urlInput as HTMLInputElement).value); // Check if is valid URL
-        dataManager.addLink({ url: url.toString() })
+        if(dataManager.addLink({ url: url.toString() })){
+            updateUI()
+            charity.lib.sonner.toast.success("URL added. Reload the page to load templates from the URL")
+        }else{
+            charity.lib.sonner.toast.error("Adding URL failed")
+        }
 
-        updateUI()
     }catch(err){
         charity.lib.sonner.toast.error("The URL provided is not a valid URL")
     }
@@ -65,9 +70,9 @@ function exportToggle(idx: number){
     exportTemplateIndexes.push(idx)
 }
 
-/**Moves a template up in draw order / ahead in the stored object's templates array
+/**Moves a template up in draw order / ahead in the stored object's templates array and reflects the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.1.0-overhaul
+ * @since 0.4.0-overhaul
  */
 function shiftUp(idx: number){
     let temp = dataManager.get() as Schemas
@@ -78,11 +83,12 @@ function shiftUp(idx: number){
     dataManager.update(temp);
 
     updateUI()
+    drawAllTemplates(); // Redraw all templates to update draw order
 }
 
-/**Moves a template down in draw order / back in the stored object's templates array
+/**Moves a template down in draw order / back in the stored object's templates array and reflects the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.1.0-overhaul
+ * @since 0.4.0-overhaul
  */
 function shiftDown(idx: number){
     let temp = dataManager.get() as Schemas
@@ -93,6 +99,7 @@ function shiftDown(idx: number){
     dataManager.update(temp);
 
     updateUI()
+    drawAllTemplates(); // Redraw all templates to update draw order
 }
 
 /**Triggers a download of a JSON file containing the templates the user previously selected

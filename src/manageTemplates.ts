@@ -1,6 +1,7 @@
 import { TBlueMarbleJSON, TBlueMarbleTemplate, TCharityTemplate } from "../types/schemas";
 import { Schemas } from "../types/types";
 import { dataManager, uiManager } from "./main";
+import { drawAllTemplates } from "./templates";
 import { coordinatesToLatLng, createElementWithAttributes, download } from "./utils";
 
 // Typescript / Javascript for the "manageTemplates" window
@@ -15,17 +16,17 @@ function close(){
 }
 
 
-/**Toggles the enabled state a template of given index
+/**Toggles the enabled state a template of given index and reflects the changes in the canvas / map
  * @param {number} idx Index of the template
- * @since 0.1.0-overhaul
+ * @since 0.4.0-overhaul
  */
 function enabledToggle(idx: number){
 
-    const temp = dataManager.get() as Schemas
+    const temp = dataManager.get() as Schemas;
     temp.templates[idx].enabled = !(temp.templates[idx].enabled);
-    dataManager.update(temp)
+    dataManager.update(temp);
 
-    // Enable / disable template in overlay
+    drawAllTemplates(); // Redraw all templates to update draw order
 }
 
 /**Adds or removes the given template from the list of templates exported when clicking "Export selected" 
@@ -73,9 +74,9 @@ function shareTemplate(idx: number){
     catch{ charity.lib.sonner.toast.error("Creating share link failed") }
 }
 
-/**Removes a template of the given index from the stored object
+/**Removes a template of the given index from the dataManager's object and reflects the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.1.0-overhaul
+ * @since 0.4.0-overhaul
  */
 function deleteTemplate(idx: number){
 
@@ -83,12 +84,15 @@ function deleteTemplate(idx: number){
     temp.templates.splice(idx,1); // Delete the template
     dataManager.update(temp)
 
-    updateUI()
+    updateUI();
+    // Removed template may have been if higher draw order and hiding part or all of another template(s),
+    // so we redraw all the templates
+    drawAllTemplates();
 }
 
-/**Moves a template up in draw order / ahead in the stored object's templates array
+/**Moves a template up in draw order / ahead in the stored object's templates array and reflect the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.1.0-overhaul
+ * @since 0.4.0-overhaul
  */
 function shiftUp(idx: number){
 
@@ -99,12 +103,13 @@ function shiftUp(idx: number){
     [temp.templates[idx], temp.templates[idx+1]] = [temp.templates[idx+1], temp.templates[idx]]
     dataManager.update(temp);
 
-    updateUI()
+    updateUI();
+    drawAllTemplates(); // Redraw all templates to update draw order
 }
 
-/**Moves a template down in draw order / back in the stored object's templates array
+/**Moves a template down in draw order / back in the stored object's templates array and reflects the changes on the canvas / map
  * @param {number} idx Index of the template
- * @since 0.1.0-overhaul
+ * @since 0.4.0-overhaul
  */
 function shiftDown(idx: number){
 
@@ -115,7 +120,8 @@ function shiftDown(idx: number){
     [temp.templates[idx], temp.templates[idx-1]] = [temp.templates[idx-1], temp.templates[idx]]
     dataManager.update(temp);
 
-    updateUI()
+    updateUI();
+    drawAllTemplates(); // Redraw all templates to update draw order
 }
 
 /**Triggers a download of a JSON file containing all the user's templates
