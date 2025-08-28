@@ -5,9 +5,7 @@ import { generateUUID } from "./utils";
 // Typescript / Javascript for the "manageTemplates" window
 
 let selectedFile: File | undefined
-let lngLat: { lng: number; lat: number; }
-let zoomLevel: number | null = null;
-
+let tilePixel: {tile: number[], pixel: number[]}
 /**Closes this window
  * @since 0.1.0-overhaul
  */
@@ -15,20 +13,22 @@ function close(){
     uiManager.close("bm-create-template")
 }
 
-/**Gets the coordinates in longitude and latitude of the clicked-on pixel
+/**Gets the coordinates of the clicked-on pixel
  * @returns A 4 element long array representing the coordines of the clicked-on pixel or undefined if an error occured
- * @since 0.1.0-overhaul
+ * @since 0.4.0-overhaul
  */
 function getCoords(): number[] | undefined{
 
-    // lngLat and zoomLevel update whenever the user clicks on a pixel
-    if(!(lngLat && zoomLevel)){ 
-        // If they don't exist, that means the player hasn't clicked on a pixel
+    // This code will currently take values from the *last* selected pixel
+    // If the user deselects a pixel, there will still be data which might cause confusion
+
+    // tilePixel updates whenever the user clicks on a pixel
+    if(tilePixel.tile.length != 2 || tilePixel.pixel.length != 2){ 
+        // If the .tile or .pixel lengths aren't 2 then something's wrong,
+        // which likely means that the player hasn't clicked on a pixel
         charity.lib.sonner.toast.error("You must select a pixel first");
         return;
     }
-    // Convert latitude and longitude into Tx, Ty, Px and Py
-    const tilePixel = charity.game.mercator.latLonToTileAndPixel(lngLat.lat, lngLat.lng, zoomLevel!)
     // Combine the tile and pixel coordinates into one array
     return [...tilePixel.tile, ...tilePixel.pixel]
 }
@@ -163,14 +163,14 @@ function createTemplate(){
 }
 
 /**Initialises this window's UI-related javascript (addEventListener hooks, ect)
- * @since 0.3.0-overhaul
+ * @since 0.4.0-overhaul
 */
 export function initCreateTemplate(){
 
     // Update the clicked-on pixel variables whenever the user clicks on a pixel
     charity.game.map.on("click", (e)=>{
-        lngLat = e.lngLat as {lat: number, lng: number};
-        zoomLevel = charity.game.map.getZoom();
+        // Convert latitude, longitude and zoom of clicked-on pixel into Tx, Ty, Px and Py
+        tilePixel = charity.game.mercator.latLonToTileAndPixel(e.lngLat.lat, e.lngLat.lng, charity.game.map.getZoom())
     })
 
     // Try to get elements and connect the appropriate function to the corresponding event listener
