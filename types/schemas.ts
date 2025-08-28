@@ -100,8 +100,8 @@ export const BlueMarbleJSON = z.object({
     .refine((version) => version.match("^0|([1-9]\d*)([.](0|([1-9]\d*))){2}$"))
     .optional(),
   schemaVersion: z.string().refine((version) => version.match("^0|([1-9]\d*)([.](0|([1-9]\d*))){2}$")),
-  templates: z.array(BlueMarbleTemplate),
-  links: z.array(BlueMarbleLink).optional(),
+  templates: z.array(BlueMarbleTemplate), // List of templates
+  links: z.array(BlueMarbleLink).optional(), // List of externally hosted JSON URLs
 })
 /** A type matching the shared JSON's schema
  * @since 0.1.0-overhaul
