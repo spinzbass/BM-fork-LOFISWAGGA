@@ -92,7 +92,7 @@ function deleteTemplate(idx: number){
     drawAllTemplates();
 }
 
-/**Moves a template up in draw order / ahead in the stored object's templates array and reflect the changes on the canvas / map
+/**Moves a template up in draw order / ahead in the global data object's templates array and reflect the changes on the canvas / map
  * @param {number} idx Index of the template
  * @since 0.1.0-overhaul
  * @version 2.0
@@ -110,7 +110,7 @@ function shiftUp(idx: number){
     drawAllTemplates(); // Redraw all templates to update draw order
 }
 
-/**Moves a template down in draw order / back in the stored object's templates array and reflects the changes on the canvas / map
+/**Moves a template down in draw order / back in the global data object's templates array and reflects the changes on the canvas / map
  * @param {number} idx Index of the template
  * @since 0.1.0-overhaul
  * @version 2.0
@@ -144,7 +144,7 @@ function exportSelected(){
     download(dataManager.getExportableData(exportTemplateIndexes, []))
 }
 
-/**Creates the rows in the table and populates them with data from the stored object
+/**Creates the rows in the table and populates them with data from the global data object
  * @since 0.3.0-overhaul
  */
 function createTableRows(){

@@ -29,16 +29,20 @@ templates: [
 }
 const storageData: TBlueMarbleJSON | undefined = DUMMY_DATA // data should be data gotten from storage
 
+// Global object that holds and manages Blue Marble's JSON data (templates, links, ect.)
 export const dataManager = new DataManager(storageData);
 // export const dataManager = new DataManager(EMPTY_BLUE_MARBLE_JSON);
+
+// Global object that manages the UI of Blue Marble's windows
 export const uiManager = new UIManager();
 
 const mainOverlay = document.querySelector("#bm-main-overlay");
+
 // If main overlay already exists that means another Blue Marble instance is already running
 if(!mainOverlay){ 
     // Only run the code if this is the first Blue Marble instance
     
-    const params = new URLSearchParams(document.location.search); // Gets the url search query
+    const params = new URLSearchParams(document.location.search); // Gets the URL search query
     if (params.has("bmShare")) {
         try {
             const json = JSON.parse(params.get("bmShare")!)
@@ -46,7 +50,7 @@ if(!mainOverlay){
         } catch { }
     }
 
-    // Make sure the stored object is in Blue Marble's JSON format
+    // Make sure the global data object is in Blue Marble's JSON format
     dataManager.toBlueMarbleSchema();
     if(dataManager.getType() !== "BM"){
         dataManager.update(EMPTY_BLUE_MARBLE_JSON)
@@ -54,7 +58,7 @@ if(!mainOverlay){
 
     else if((dataManager.get() as TBlueMarbleJSON).links){
         (dataManager.get() as TBlueMarbleJSON).links?.forEach(link => {
-            // Imports data from every URL in the stored object
+            // Imports data from every URL in the global data object
             importFromURL(link.url);
         })
     }
@@ -71,7 +75,7 @@ if(!mainOverlay){
 
 }
 
-/** Fetches data from a url and then updates the object stored in dataManager appropriately
+/** Fetches data from a URL and then updates the object stored in dataManager appropriately
  * @since 0.1.0-overhaul
  */
 function importFromURL(url: string){

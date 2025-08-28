@@ -103,7 +103,7 @@ function fileInputChange(e: InputEvent){
     selectedFile = files[0]; // Get the file from the input
 }
 
-/**Gets the data from all the inputs and organises them into the Blue Marble template format
+/**Gets the data from all the inputs and organises them into a Blue Marble template object
  * @returns The data organised into a Blue Marble template object or undefined if an error occured
  * @since 0.1.0-overhaul
  */
@@ -172,7 +172,8 @@ function createTemplate(){
 }
 
 /**Initialises this window's UI-related javascript (addEventListener hooks, ect)
- * @since 0.4.0-overhaul
+ * @since 0.2.0-overhaul
+ * @version 1.1
 */
 export function initCreateTemplate(){
 

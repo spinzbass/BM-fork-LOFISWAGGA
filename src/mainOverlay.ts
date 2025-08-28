@@ -1,6 +1,6 @@
 import { uiManager } from "./main";
 
-// Typescript / Javascript for the "manageTemplates" window
+// Typescript / Javascript for the "mainOverlay" window
 
 /**Closes this window
  * @since 0.1.0-overhaul
