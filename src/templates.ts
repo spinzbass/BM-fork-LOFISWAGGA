@@ -13,6 +13,8 @@ export function drawTemplateOfIndex(idx: number){
     // Bounds checking
     if(idx < 0 || idx > (dataManager.get() as TBlueMarbleJSON).templates.length){ return };
 
+    clearTemplates(); // Clears the templates so old templates don't get mixed in with the new ones
+
     drawTemplate((dataManager.get() as TBlueMarbleJSON).templates[idx]);
 }
 
@@ -30,10 +32,17 @@ export function drawAllTemplates(){
 
 }
 
-/** Draws a template onto the map / canvas
+/**Draws a template onto the map / canvas
  * @param {TBlueMarbleTemplate} template The template data in Blue Marble's JSON format
  * @since 0.4.0-overhaul
  */
 function drawTemplate(template: TBlueMarbleTemplate){
     // Draw the template
+}
+
+/**Clears the templates from the canvas / map
+ * @since 0.4.0-overhaul
+ */
+function clearTemplates(){
+    // Clear templates
 }
